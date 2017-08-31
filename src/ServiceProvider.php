@@ -2,7 +2,6 @@
 
 namespace LukePOLO\LaravelApiMigrations;
 
-use function app_path;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Finder\SplFileInfo;
@@ -68,9 +67,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         if (File::exists($this->migrationsPath)) {
             return $this->getApiVersions()
-                ->mapWithKeys(function($version) {
+                ->mapWithKeys(function ($version) {
                     return [
-                        $version => $this->getApiVersionReleases($version)
+                        $version => $this->getApiVersionReleases($version),
                     ];
                 });
         }
@@ -91,12 +90,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $migrationPath = $this->migrationsPath.'/V'.$version;
         if (File::exists($migrationPath)) {
             return collect(File::directories($migrationPath))
-                ->map(function($release) {
+                ->map(function ($release) {
                     return substr($release, strpos($release, 'Release_') + 8);
                 })
-                ->mapWithKeys(function($release) use($migrationPath) {
+                ->mapWithKeys(function ($release) use ($migrationPath) {
                     return [
-                        $release => $this->getApiReleaseMigrations($migrationPath.'/Release_'.$release)
+                        $release => $this->getApiReleaseMigrations($migrationPath.'/Release_'.$release),
                     ];
                 });
         }
@@ -147,5 +146,4 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             ).'/'.$file->getBasename('.php')
         );
     }
-
 }

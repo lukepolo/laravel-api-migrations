@@ -12,7 +12,7 @@ class ApiMigrationMakeCommand extends GeneratorCommand
     protected $release;
     protected $version;
     protected $apiDetails;
-    
+
     /**
      * The console command name.
      *
@@ -78,8 +78,8 @@ class ApiMigrationMakeCommand extends GeneratorCommand
         );
     }
 
-    protected function publishableApiVersionReleases(int $version) {
-
+    protected function publishableApiVersionReleases(int $version)
+    {
         $release = $this->apiDetails->get($version);
 
         return array_merge(
@@ -109,5 +109,4 @@ class ApiMigrationMakeCommand extends GeneratorCommand
     {
         return $rootNamespace . '\Http\ApiMigrations\V'.$this->version.'\Release_'.str_replace('-', '_', $this->release);
     }
-
 }
