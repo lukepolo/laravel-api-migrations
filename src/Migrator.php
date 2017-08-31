@@ -59,14 +59,10 @@ class Migrator
     public function processRequestMigrations() : Request
     {
         $this->neededMigrations($this->getRequestVersion())
-            ->transform(function ($migrations) {
-                return Collection::make($migrations)->flatten();
-            })
             ->flatten()
             ->each(function ($migration) {
-                $this->request = (new $migration())->migrateRequest($this->request);
+                $this->request = (new $migration)->migrateRequest($this->request);
             });
-
         return $this->request;
     }
 
@@ -79,11 +75,8 @@ class Migrator
     {
         $this->response = $response;
 
-        Collection::make($this->neededMigrations($this->getResponseVersion()))
+        $this->neededMigrations($this->getResponseVersion())
             ->reverse()
-            ->transform(function ($migrations) {
-                return Collection::make($migrations);
-            })
             ->flatten()
             ->each(function ($migration) {
                 $this->response = (new $migration())->migrateResponse($this->response);
@@ -126,14 +119,15 @@ class Migrator
         }
 
         return $this->releases
-            ->reject(function ($index, $version) use ($migrationVersion) {
+            ->reject(function ($migrations, $version) use ($migrationVersion) {
                 return $version < $migrationVersion;
             })
             ->filter(function ($classList) {
-                return Collection::make($classList)->transform(function ($class) {
-                    return Collection::make((new $class)->paths())->filter(function ($path) {
-                        return $this->request->fullUrlIs($path);
-                    });
+                return $classList->filter(function ($class) {
+                    return collect((new $class)->paths())
+                        ->filter(function ($path) {
+                            return $this->request->fullUrlIs($path);
+                        })->isNotEmpty();
                 })->isNotEmpty();
             });
     }
