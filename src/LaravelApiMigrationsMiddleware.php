@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
-use function strtoupper;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use LukePOLO\LaravelApiMigrations\Traits\ApiRequestHeadersTrait;
@@ -32,7 +31,7 @@ class LaravelApiMigrationsMiddleware
      */
     public function handle(Request $request, Closure $next) : Response
     {
-        $this->apiDetails  = app()->make('getApiDetails');
+        $this->apiDetails = app()->make('getApiDetails');
 
         /* @var Migrator $migrator */
         $this->migrator = Container::getInstance()
