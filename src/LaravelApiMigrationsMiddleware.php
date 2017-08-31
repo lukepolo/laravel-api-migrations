@@ -3,7 +3,6 @@
 namespace LukePOLO\LaravelApiMigrations;
 
 use Closure;
-use function strtoupper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
@@ -15,7 +14,7 @@ class LaravelApiMigrationsMiddleware
     /** @var \Illuminate\Http\Request */
     protected $request;
 
-    /** @var  Migrator */
+    /** @var Migrator */
     protected $migrator;
 
     protected $releases;
@@ -32,7 +31,7 @@ class LaravelApiMigrationsMiddleware
      */
     public function handle(Request $request, Closure $next) : Response
     {
-        /** @var Migrator $migrator */
+        /* @var Migrator $migrator */
         $this->migrator = Container::getInstance()
             ->make(Migrator::class);
 
@@ -58,7 +57,7 @@ class LaravelApiMigrationsMiddleware
 
         $user = $this->request->user();
 
-        if ($user && !empty($user->api_version)) {
+        if ($user && ! empty($user->api_version)) {
             $this->migrator->setVersion($user->api_version);
         }
 
@@ -86,18 +85,12 @@ class LaravelApiMigrationsMiddleware
         return $apiVersions ? $apiVersions : collect();
     }
 
-    /**
-     *
-     */
     private function validateRequest()
     {
         $this->validateRequestVersion();
         $this->validateResponseVersion();
     }
 
-    /**
-     *
-     */
     private function validateRequestVersion()
     {
         $requestVersion = $this->getRequestVersion();
@@ -123,9 +116,6 @@ class LaravelApiMigrationsMiddleware
         );
     }
 
-    /**
-     *
-     */
     private function validateResponseVersion()
     {
         $responseVersion = $this->getResponseVersion();
@@ -159,7 +149,6 @@ class LaravelApiMigrationsMiddleware
         $this->request->headers->set(config('api-migrations.headers.request-version'), $requestVersion);
     }
 
-
     /**
      * @param string $responseVersion
      */
@@ -184,11 +173,10 @@ class LaravelApiMigrationsMiddleware
     {
         $routePrefix = explode('/', $this->request->route()->getPrefix());
 
-        if(isset($routePrefix[1])) {
+        if (isset($routePrefix[1])) {
             return strtoupper($routePrefix[1]);
         }
 
         dd('WE NEED TO GRAB THE LATEST VERSION FROM THE VERSIONS');
     }
-
 }
