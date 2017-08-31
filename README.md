@@ -1,8 +1,8 @@
-This package was original was build by Tom Schlick, but wanted a more out of the box 
+This package was original was build by Tom Schlick, but I wanted a more out of the box 
 experience with convention over configuration for the user 
 
 You can find that here : 
-https://github.com/lukepolo/laravel-api-migrations
+https://github.com/tomschlick/request-migrations
 
 # Laravel API Migrations
 
