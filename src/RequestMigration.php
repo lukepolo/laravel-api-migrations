@@ -1,6 +1,6 @@
 <?php
 
-namespace TomSchlick\RequestMigrations;
+namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

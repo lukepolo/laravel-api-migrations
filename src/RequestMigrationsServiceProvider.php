@@ -1,10 +1,10 @@
 <?php
 
-namespace TomSchlick\RequestMigrations;
+namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
-use TomSchlick\RequestMigrations\Commands\RequestMigrationMakeCommand;
+use LukePOLO\LaravelApiMigrations\Commands\RequestMigrationMakeCommand;
 
 class RequestMigrationsServiceProvider extends ServiceProvider
 {

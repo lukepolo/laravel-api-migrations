@@ -1,6 +1,6 @@
 <?php
 
-namespace TomSchlick\RequestMigrations;
+namespace LukePOLO\LaravelApiMigrations;
 
 use Closure;
 use Illuminate\Http\Request;

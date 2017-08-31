@@ -1,6 +1,6 @@
 <?php
 
-namespace TomSchlick\RequestMigrations\Commands;
+namespace LukePOLO\LaravelApiMigrations\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 

@@ -26,7 +26,7 @@ If you are using an earlier version of Laravel or have autoloading disabled you 
 [
 	'providers' => [
 		...
-		\TomSchlick\RequestMigrations\RequestMigrationsMiddleware::class,
+		\LukePOLO\LaravelApiMigrations\RequestMigrationsMiddleware::class,
 		...
 	],
 	
@@ -34,7 +34,7 @@ If you are using an earlier version of Laravel or have autoloading disabled you 
 	
 	'aliases' => [
 		...
-		'RequestMigrations' => '\TomSchlick\RequestMigrations\Facades\RequestMigrations::class,
+		'RequestMigrations' => '\LukePOLO\LaravelApiMigrations\Facades\RequestMigrations::class,
 		...
 	],
 ]	
@@ -47,7 +47,7 @@ Add the middleware to your Http Kernel `app/Http/Kernel.php`.
 
 ```php
 protected $middleware = [
-	\TomSchlick\RequestMigrations\RequestMigrationsMiddleware::class,
+	\LukePOLO\LaravelApiMigrations\RequestMigrationsMiddleware::class,
 ];
 
 ```
@@ -57,7 +57,7 @@ protected $middleware = [
 Run the following Artisan command to publish the package configuration to `config/request-migrations.php`.
 
 ```bash
-php artisan vendor:publish --provider="TomSchlick\RequestMigrations\RequestMigrationsServiceProvider"
+php artisan vendor:publish --provider="LukePOLO\LaravelApiMigrations\RequestMigrationsServiceProvider"
 ```
 
 ## Usage
@@ -76,7 +76,7 @@ The command will generate a request migration and publish it to `App/Http/Migrat
 ### Override the Versions
 
 ```php
-use TomSchlick\RequestMigrations\Facades\RequestMigrations;
+use LukePOLO\LaravelApiMigrations\Facades\RequestMigrations;
 
 // set both response & request versions
 RequestMigrations::setVersion('2017-01-01')

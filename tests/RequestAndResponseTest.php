@@ -1,9 +1,9 @@
 <?php
 
-namespace TomSchlick\RequestMigrations\Tests;
+namespace LukePOLO\LaravelApiMigrations\Tests;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use TomSchlick\RequestMigrations\Facades\RequestMigrations;
+use LukePOLO\LaravelApiMigrations\Facades\RequestMigrations;
 
 class RequestAndResponseTest extends TestCase
 {

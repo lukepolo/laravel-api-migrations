@@ -1,13 +1,13 @@
 <?php
 
-namespace TomSchlick\RequestMigrations\Tests;
+namespace LukePOLO\LaravelApiMigrations\Tests;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as Orchestra;
-use TomSchlick\RequestMigrations\RequestMigrationsMiddleware;
-use TomSchlick\RequestMigrations\RequestMigrationsServiceProvider;
-use TomSchlick\RequestMigrations\Tests\Migrations\GroupNameMigration;
+use LukePOLO\LaravelApiMigrations\RequestMigrationsMiddleware;
+use LukePOLO\LaravelApiMigrations\RequestMigrationsServiceProvider;
+use LukePOLO\LaravelApiMigrations\Tests\Migrations\GroupNameMigration;
 
 abstract class TestCase extends Orchestra
 {

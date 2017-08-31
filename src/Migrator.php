@@ -1,6 +1,6 @@
 <?php
 
-namespace TomSchlick\RequestMigrations;
+namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace TomSchlick\RequestMigrations\Tests;
+namespace LukePOLO\LaravelApiMigrations\Tests;
 
 class MigratorTest extends TestCase
 {

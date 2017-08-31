@@ -1,6 +1,6 @@
 <?php
 
-namespace TomSchlick\RequestMigrations\Facades;
+namespace LukePOLO\LaravelApiMigrations\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

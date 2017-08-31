@@ -1,10 +1,10 @@
 <?php
 
-namespace TomSchlick\RequestMigrations\Tests\Migrations;
+namespace LukePOLO\LaravelApiMigrations\Tests\Migrations;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use TomSchlick\RequestMigrations\RequestMigration;
+use LukePOLO\LaravelApiMigrations\RequestMigration;
 
 class GroupNameMigration extends RequestMigration
 {
