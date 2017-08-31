@@ -72,7 +72,7 @@ class Migrator
      */
     public function setCurrentVersion($currentVersion): Migrator
     {
-        $this->currentVersion= $currentVersion;
+        $this->currentVersion = $currentVersion;
 
         return $this;
     }
