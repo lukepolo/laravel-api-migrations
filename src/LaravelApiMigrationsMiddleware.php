@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
+use function strtoupper;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use LukePOLO\LaravelApiMigrations\Traits\ApiRequestHeadersTrait;
@@ -21,6 +22,7 @@ class LaravelApiMigrationsMiddleware
     protected $migrator;
 
     protected $releases;
+    protected $apiDetails;
 
     /**
      * @param \Illuminate\Http\Request $request
@@ -30,6 +32,8 @@ class LaravelApiMigrationsMiddleware
      */
     public function handle(Request $request, Closure $next) : Response
     {
+        $this->apiDetails  = app()->make('getApiDetails');
+
         /* @var Migrator $migrator */
         $this->migrator = Container::getInstance()
             ->make(Migrator::class);
@@ -86,7 +90,7 @@ class LaravelApiMigrationsMiddleware
             return $this->releases;
         }
 
-        $apiVersions = app()->make('getApiDetails')->get($this->getApiVersion());
+        $apiVersions = $this->apiDetails->get($this->getApiVersion());
 
         return $apiVersions ? $apiVersions : collect();
     }
@@ -134,6 +138,6 @@ class LaravelApiMigrationsMiddleware
             return strtoupper($routePrefix[1]);
         }
 
-        dd('WE NEED TO GRAB THE LATEST VERSION FROM THE VERSIONS');
+        return $this->apiDetails->keys()->last();
     }
 }
