@@ -3,7 +3,6 @@
 namespace LukePOLO\LaravelApiMigrations;
 
 use Closure;
-use function strtoupper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
@@ -18,7 +17,7 @@ class LaravelApiMigrationsMiddleware
     /** @var \Illuminate\Http\Request */
     protected $request;
 
-    /** @var  Migrator */
+    /** @var Migrator */
     protected $migrator;
 
     protected $releases;
@@ -31,7 +30,7 @@ class LaravelApiMigrationsMiddleware
      */
     public function handle(Request $request, Closure $next) : Response
     {
-        /** @var Migrator $migrator */
+        /* @var Migrator $migrator */
         $this->migrator = Container::getInstance()
             ->make(Migrator::class);
 
@@ -61,12 +60,12 @@ class LaravelApiMigrationsMiddleware
         $user = $this->request->user();
 
         if ($user) {
-            if (!empty($user->api_version)) {
+            if (! empty($user->api_version)) {
                 $this->setVersion($user->api_version);
             } else {
-                if (!empty($currentVersion) && config('api-migrations.version_pinning')) {
+                if (! empty($currentVersion) && config('api-migrations.version_pinning')) {
                     $user->update([
-                        'api_version' => $currentVersion
+                        'api_version' => $currentVersion,
                     ]);
                     $this->setVersion($currentVersion);
                 }
@@ -131,11 +130,10 @@ class LaravelApiMigrationsMiddleware
     {
         $routePrefix = explode('/', $this->request->route()->getPrefix());
 
-        if(isset($routePrefix[1])) {
+        if (isset($routePrefix[1])) {
             return strtoupper($routePrefix[1]);
         }
 
         dd('WE NEED TO GRAB THE LATEST VERSION FROM THE VERSIONS');
     }
-
 }

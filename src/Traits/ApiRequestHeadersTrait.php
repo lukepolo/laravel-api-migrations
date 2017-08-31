@@ -89,5 +89,4 @@ trait ApiRequestHeadersTrait
     {
         return str_replace('-', '_', $version);
     }
-
 }
