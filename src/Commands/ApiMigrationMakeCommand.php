@@ -38,7 +38,7 @@ class ApiMigrationMakeCommand extends GeneratorCommand
         $this->versions = app()->make('getRequestMigrationsVersions')->keys();
 
         $this->version = $this->choice(
-            "Which version would you like to publish to?",
+            'Which version would you like to publish to?',
             $choices = $this->publishableChoices()
         );
 
@@ -46,12 +46,13 @@ class ApiMigrationMakeCommand extends GeneratorCommand
             $this->version = $this->ask('Please enter your version in Y-m-d format.', Carbon::now()->format('Y-m-d'));
         }
 
-        if(empty(config('request-migrations.current_version'))) {
+        if (empty(config('request-migrations.current_version'))) {
             $this->info('Please set your default version in your request-migrations config');
         }
 
-        if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",str_replace('_', '-', $this->version))) {
+        if (! preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', str_replace('_', '-', $this->version))) {
             $this->error('You provided a invalid date');
+
             return false;
         }
 
@@ -65,13 +66,12 @@ class ApiMigrationMakeCommand extends GeneratorCommand
      */
     protected function publishableChoices()
     {
-        if($this->versions) {
+        if ($this->versions) {
             return array_merge(
                 ['<comment>Create New Version</comment>'],
                 $this->versions->toArray()
             );
         }
-
     }
 
     /**

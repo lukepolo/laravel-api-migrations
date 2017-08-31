@@ -2,7 +2,6 @@
 
 namespace LukePOLO\LaravelApiMigrations\Commands;
 
-use function base_path;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
