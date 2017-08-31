@@ -3,10 +3,9 @@
 namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\ServiceProvider;
 use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 
-class ServiceProvider extends ServiceProvider
+class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
      * Bootstrap the application services.

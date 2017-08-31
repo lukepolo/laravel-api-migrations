@@ -54,10 +54,10 @@
     "extra" : {
         "laravel" : {
             "providers" : [
-                "LukePOLO\\LaravelApiMigrations\\RequestMigrationsServiceProvider"
+                "LukePOLO\\LaravelApiMigrations\\ServiceProvider"
             ],
             "aliases" : {
-                "RequestMigrations": "LukePOLO\\LaravelApiMigrations\\Facades\\RequestMigrations"
+                "RequestMigrations": "LukePOLO\\LaravelApiMigrations\\Facades\\ApiMigrations"
             }
         }
     }
