@@ -53,19 +53,19 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->app->alias(Migrator::class, 'api-migrations');
 
-        $this->app->bind('getApiMigrations', function () {
+        $this->app->singleton('getApiDetails', function () {
             return $this->generateApiDetails();
         });
+    }
 
+    protected function generateApiDetails()
+    {
         $cacheFile = base_path(self::REQUEST_MIGRATIONS_CACHE);
 
         if (File::exists($cacheFile)) {
             return collect(require($cacheFile));
         }
-    }
 
-    protected function generateApiDetails()
-    {
         if (File::exists($this->migrationsPath)) {
             return $this->getApiVersions()
                 ->mapWithKeys(function($version) {
@@ -82,13 +82,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         return collect(File::directories($this->migrationsPath))
             ->map(function ($versionDirectory) {
-                return substr($versionDirectory, strpos($versionDirectory, 'V') + 1);
+                return substr($versionDirectory, strpos($versionDirectory, 'V'));
             });
     }
 
     protected function getApiVersionReleases($version)
     {
-        $migrationPath = $this->migrationsPath.'/V'.$version;
+        $migrationPath = $this->migrationsPath.'/'.$version;
         if (File::exists($migrationPath)) {
             return collect(File::directories($migrationPath))
                 ->map(function($release) {

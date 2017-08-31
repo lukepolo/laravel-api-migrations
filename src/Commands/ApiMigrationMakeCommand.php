@@ -36,7 +36,7 @@ class ApiMigrationMakeCommand extends GeneratorCommand
     {
         File::delete(ServiceProvider::REQUEST_MIGRATIONS_CACHE);
 
-        $this->apiDetails = app()->make('getApiMigrations');
+        $this->apiDetails = app()->make('getApiDetails');
 
         $this->version = $this->choice(
             'Which API version would you like to publish to?',

@@ -12,7 +12,9 @@ return [
     */
 
     'headers' => [
-        'api-version'  => 'x-api-version',
+        'current-version'  => 'x-api-current-version',
+        'request-version'  => 'x-api-request-version',
+        'response-version' => 'x-api-response-version',
     ],
 
     /*
@@ -25,6 +27,9 @@ return [
     |
     */
 
-    'current_version' => '1',
+    'current_versions' => [
+        'V1' => '2017-09-31',
+        'V2' => '2018-09-1'
+    ]
 
 ];

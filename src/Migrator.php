@@ -19,7 +19,7 @@ class Migrator
      */
     protected $response;
 
-    protected $versions;
+    protected $releases;
 
     protected $currentVersion = null;
 
@@ -40,53 +40,39 @@ class Migrator
     public function __construct(array $config)
     {
         $this->config = $config;
-
-        $this->versions = app()->make('getApiMigrations');
-
-        $this->currentVersion = Arr::get($config, 'current_version');
-
-        if (empty($this->currentVersion)) {
-            $this->currentVersion = $this->versions->keys()->first();
-        }
     }
 
     /**
-     * Set the request and the versions from the request headers.
+     * Set the request from the request headers.
      *
      * @param Request $request
      * @return Migrator
      */
-    public function setRequest(Request $request) : Migrator
+    public function setRequest(Request $request): Migrator
     {
         $this->request = $request;
-        $this->requestVersion = $this->requestVersion ?: $request->header(Arr::get($this->config, 'headers.request-version'));
-        $this->responseVersion = $this->responseVersion ?: $request->header(Arr::get($this->config, 'headers.response-version'));
 
         return $this;
     }
 
     /**
-     * Set the response version.
-     *
-     * @param string $version
+     * @param $releases
      * @return Migrator
      */
-    public function setResponseVersion(string $version) : Migrator
+    public function setReleases($releases): Migrator
     {
-        $this->responseVersion = $version;
+        $this->releases = $releases;
 
         return $this;
     }
 
     /**
-     * Set the request version.
-     *
-     * @param string $version
+     * @param $currentVersion
      * @return Migrator
      */
-    public function setRequestVersion(string $version) : Migrator
+    public function setCurrentVersion($currentVersion): Migrator
     {
-        $this->requestVersion = $version;
+        $this->currentVersion= $currentVersion;
 
         return $this;
     }
@@ -183,7 +169,7 @@ class Migrator
             return [];
         }
 
-        return $this->versions
+        return $this->releases
             ->reject(function ($classList, $version) use ($migrationVersion) {
                 return $version < $migrationVersion;
             })

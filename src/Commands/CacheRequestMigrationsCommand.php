@@ -35,7 +35,7 @@ class CacheRequestMigrationsCommand extends Command
 
         File::put(
             base_path($requestMigrationsCache),
-            '<?php return '.var_export(app()->make('getApiMigrations')->toArray(), true).';'
+            '<?php return '.var_export(app()->make('getApiDetails')->toArray(), true).';'
         );
 
         $this->info('Api Migrations Cached');
