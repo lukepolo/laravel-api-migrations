@@ -43,13 +43,14 @@ If you are using an earlier version of Laravel or have autoloading disabled you 
 
 Add the middleware to your Http Kernel `app/Http/Kernel.php`.
 
+You have a couple of choices where to put this, recommenced under the api middleware!
+
 ```php
 protected $middlewareGroups = [
-        'api' => [
-            '....',
-	        \LukePOLO\LaravelApiMigrations\LaravelApiMigrationsMiddleware::class,
-        ];
-];
+    'api' => [
+        \LukePOLO\LaravelApiMigrations\LaravelApiMigrationsMiddleware::class,
+    ];
+]
 ```
 
 ### Configuration
@@ -98,11 +99,7 @@ LaravelApiMigrations::setRequestVersion('2017-01-01')
 
 // set the response version
 LaravelApiMigrations::setResponseVersion('2017-01-01')
-```
 
-
-```php
-RequestMigrations::setVersion(auth()->user()->api_version);
 ```
 
 ## Changelog
