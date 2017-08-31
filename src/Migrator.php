@@ -5,9 +5,12 @@ namespace LukePOLO\LaravelApiMigrations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
+use LukePOLO\LaravelApiMigrations\Traits\ApiRequestHeadersTrait;
 
 class Migrator
 {
+    use ApiRequestHeadersTrait;
+
     /**
      * @var \Illuminate\Http\Request
      */
@@ -20,12 +23,6 @@ class Migrator
 
     protected $releases;
 
-    protected $currentVersion = null;
-
-    protected $requestVersion = null;
-
-    protected $responseVersion = null;
-
     /**
      * @var array
      */
@@ -37,22 +34,19 @@ class Migrator
      * @param Request $request
      * @return Migrator
      */
-    public function setRequest(Request $request): Migrator
+    public function setRequest(Request $request) : Migrator
     {
         $this->request = $request;
-
-        $this->requestVersion = $this->requestVersion ?: $request->header(config('api-migrations.headers.request-version'));
-        $this->responseVersion = $this->responseVersion ?: $request->header(config('api-migrations.headers.response-version'));
-        $this->responseVersion = $this->currentVersion ?: $request->header(config('api-migrations.headers.current-version'));
 
         return $this;
     }
 
     /**
-     * @param $releases
+     * @param Collection $releases
+     *
      * @return Migrator
      */
-    public function setReleases($releases): Migrator
+    public function setReleases(Collection $releases) : Migrator
     {
         $this->releases = $releases;
 
@@ -60,27 +54,11 @@ class Migrator
     }
 
     /**
-     * Set both the response and request version.
-     *
-     * @param string $version
-     * @return Migrator
-     */
-    public function setVersion(string $version) : Migrator
-    {
-        $this->requestVersion = $version;
-        $this->responseVersion = $version;
-
-        return $this;
-    }
-
-    /**
-     * Process the migrations for the incoming request.
-     *
      * @return \Illuminate\Http\Request
      */
     public function processRequestMigrations() : Request
     {
-        $this->neededMigrations($this->requestVersion)
+        $this->neededMigrations($this->getRequestVersion())
             ->transform(function ($migrations) {
                 return Collection::make($migrations)->flatten();
             })
@@ -93,17 +71,15 @@ class Migrator
     }
 
     /**
-     * Process the migrations for the outgoing response.
-     *
      * @param \Symfony\Component\HttpFoundation\Response $response
      *
-     * @return $this
+     * @return Migrator
      */
-    public function processResponseMigrations(Response $response)
+    public function processResponseMigrations(Response $response) : Migrator
     {
         $this->response = $response;
 
-        Collection::make($this->neededMigrations($this->responseVersion))
+        Collection::make($this->neededMigrations($this->getResponseVersion()))
             ->reverse()
             ->transform(function ($migrations) {
                 return Collection::make($migrations);
@@ -127,22 +103,18 @@ class Migrator
     }
 
     /**
-     * Set the API Response Headers.
-     *
-     * @return $this
+     * @return Migrator
      */
-    private function setResponseHeaders()
+    private function setResponseHeaders() : Migrator
     {
-        $this->response->headers->set(config('api-versions.headers.current-version'), $this->currentVersion, true);
-        $this->response->headers->set(config('api-versions.headers.request-version'), $this->requestVersion, true);
-        $this->response->headers->set(config('api-versions.headers.response-version'), $this->responseVersion, true);
+        $this->setCurrentVersion($this->getCurrentVersion());
+        $this->setRequestVersion($this->getRequestVersion());
+        $this->setResponseVersion($this->getResponseVersion());
 
         return $this;
     }
 
     /**
-     * Figure out which migrations apply to the current request.
-     *
      * @param $migrationVersion string The migration version to check migrations against
      *
      * @return Collection
@@ -153,8 +125,8 @@ class Migrator
             return collect();
         }
 
-        return collect($this->releases)
-            ->reject(function ($version) use ($migrationVersion) {
+        return $this->releases
+            ->reject(function ($index, $version) use ($migrationVersion) {
                 return $version < $migrationVersion;
             })
             ->filter(function ($classList) {

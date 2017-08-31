@@ -28,8 +28,18 @@ return [
     */
 
     'current_versions' => [
-        'V1' => '2017-09-31',
-        'V2' => '2018-09-1',
+//        'V1' => '2017-01-31',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Version Pinning
+    |--------------------------------------------------------------------------
+    |
+    | When a user does not have a version set , we will set the latest version
+    |
+    */
+
+    'version_pinning' => false,
 
 ];

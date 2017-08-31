@@ -9,9 +9,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use LukePOLO\LaravelApiMigrations\Traits\ApiRequestHeadersTrait;
 
 class LaravelApiMigrationsMiddleware
 {
+    use ApiRequestHeadersTrait;
+
     /** @var \Illuminate\Http\Request */
     protected $request;
 
@@ -19,10 +22,6 @@ class LaravelApiMigrationsMiddleware
     protected $migrator;
 
     protected $releases;
-
-    protected $currentVersion;
-    protected $requestVersion;
-    protected $responseVersion;
 
     /**
      * @param \Illuminate\Http\Request $request
@@ -51,19 +50,28 @@ class LaravelApiMigrationsMiddleware
      *
      * @return $this
      */
-    private function setupRequest(Request $request)
+    private function setupRequest(Request $request) : LaravelApiMigrationsMiddleware
     {
         $this->request = $request;
-        $this->currentVersion = $this->cleanVersion(config('api-migrations.current_versions.'.$this->getApiVersion()));
+
+        $currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
+
+        $this->setCurrentVersion($currentVersion);
 
         $user = $this->request->user();
 
-        if ($user && !empty($user->api_version)) {
-            $this->migrator->setVersion($user->api_version);
+        if ($user) {
+            if (!empty($user->api_version)) {
+                $this->setVersion($user->api_version);
+            } else {
+                if (!empty($currentVersion) && config('api-migrations.version_pinning')) {
+                    $user->update([
+                        'api_version' => $currentVersion
+                    ]);
+                    $this->setVersion($currentVersion);
+                }
+            }
         }
-
-        $this->setResponseVersion($this->responseVersion);
-        $this->setRequestVersion($this->requestVersion);
 
         $this->releases = $this->releases();
 
@@ -71,8 +79,6 @@ class LaravelApiMigrationsMiddleware
     }
 
     /**
-     * Get all the available releases.
-     *
      * @return Collection
      */
     private function releases() : Collection
@@ -86,53 +92,32 @@ class LaravelApiMigrationsMiddleware
         return $apiVersions ? $apiVersions : collect();
     }
 
-    /**
-     *
-     */
-    private function validateRequest()
+    private function validateRequest() : void
     {
         $this->validateRequestVersion();
         $this->validateResponseVersion();
     }
 
-    /**
-     *
-     */
-    private function validateRequestVersion()
+    private function validateRequestVersion() : void
     {
         $requestVersion = $this->getRequestVersion();
 
         if (
             $requestVersion &&
-            $requestVersion < $this->currentVersion &&
+            $requestVersion < $this->getCurrentVersion() &&
             ! $this->releases->keys()->contains($requestVersion)
         ) {
             throw new HttpException(400, 'The request version is invalid');
         }
     }
 
-    /**
-     * Get the request version from the request.
-     *
-     * @return string
-     */
-    private function getRequestVersion() : string
-    {
-        return $this->cleanVersion(
-            $this->request->header(config('api-migrations.headers.request-version'))
-        );
-    }
-
-    /**
-     *
-     */
-    private function validateResponseVersion()
+    private function validateResponseVersion() : void
     {
         $responseVersion = $this->getResponseVersion();
 
         if (
             $responseVersion &&
-            $responseVersion < $this->currentVersion &&
+            $responseVersion < $this->getCurrentVersion() &&
             ! $this->releases->keys()->contains($responseVersion)
         ) {
             throw new HttpException(400, 'The response version is invalid');
@@ -140,47 +125,9 @@ class LaravelApiMigrationsMiddleware
     }
 
     /**
-     * Get the response version from the request.
-     *
      * @return string
      */
-    private function getResponseVersion() : string
-    {
-        return $this->cleanVersion(
-            $this->request->header(config('api-migrations.headers.response-version'), '')
-        );
-    }
-
-    /**
-     * @param string $requestVersion
-     */
-    private function setRequestVersion($requestVersion = '')
-    {
-        $this->request->headers->set(config('api-migrations.headers.request-version'), $requestVersion);
-    }
-
-
-    /**
-     * @param string $responseVersion
-     */
-    private function setResponseVersion($responseVersion = '')
-    {
-        $this->request->headers->set(config('api-migrations.headers.response-version'), $responseVersion);
-    }
-
-    /**
-     * @param $version
-     * @return mixed
-     */
-    private function cleanVersion($version)
-    {
-        return str_replace('-', '_', $version);
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getApiVersion()
+    protected function getApiVersion() : string
     {
         $routePrefix = explode('/', $this->request->route()->getPrefix());
 
