@@ -63,6 +63,7 @@ class Migrator
             ->each(function ($migration) {
                 $this->request = (new $migration)->migrateRequest($this->request);
             });
+
         return $this->request;
     }
 
