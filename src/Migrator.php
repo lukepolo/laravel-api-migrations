@@ -41,7 +41,7 @@ class Migrator
     {
         $this->config = $config;
 
-        $this->versions = app()->make('getRequestMigrationsVersions');
+        $this->versions = app()->make('getApiMigrations');
 
         $this->currentVersion = Arr::get($config, 'current_version');
 

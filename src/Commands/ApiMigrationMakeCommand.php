@@ -24,7 +24,7 @@ class ApiMigrationMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create a new request migration';
+    protected $description = 'Create a new API migration';
 
     /**
      * Execute the console command.
@@ -35,10 +35,10 @@ class ApiMigrationMakeCommand extends GeneratorCommand
     {
         File::delete(ServiceProvider::REQUEST_MIGRATIONS_CACHE);
 
-        $this->versions = app()->make('getRequestMigrationsVersions')->keys();
+        $this->versions = app()->make('getApiMigrations')->keys();
 
         $this->version = $this->choice(
-            'Which version would you like to publish to?',
+            'Which API version would you like to publish to?',
             $choices = $this->publishableChoices()
         );
 

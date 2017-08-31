@@ -12,7 +12,7 @@ return [
     */
 
     'headers'         => [
-        'api-version'  => 'x-api-request-version',
+        'api-version'  => 'x-api-version',
         'current-version'  => 'x-api-current-version',
     ],
 

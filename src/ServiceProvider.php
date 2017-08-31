@@ -4,12 +4,12 @@ namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
-use LukePOLO\LaravelApiMigrations\Commands\RequestMigrationMakeCommand;
+use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 use LukePOLO\LaravelApiMigrations\Commands\CacheRequestMigrationsCommand;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    const REQUEST_MIGRATIONS_CACHE = '/bootstrap/cache/request-migrations.php';
+    const REQUEST_MIGRATIONS_CACHE = '/bootstrap/cache/api-migrations.php';
 
     /**
      * Bootstrap the application services.
@@ -18,7 +18,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('request-migrations.php'),
+                __DIR__ . '/../config/config.php' => config_path('api-migrations.php'),
             ], 'config');
         }
 
@@ -34,20 +34,20 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(Migrator::class, function () {
-            return new Migrator(Config::get('request-migrations'));
-        });
-
-        $this->app->alias(Migrator::class, 'request-migrations');
-
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'request-migrations');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'api-migrations');
 
         $this->commands([
-            RequestMigrationMakeCommand::class,
+            ApiMigrationMakeCommand::class,
             CacheRequestMigrationsCommand::class,
         ]);
 
-        $this->app->bind('getRequestMigrationsVersions', function () {
+        $this->app->singleton(Migrator::class, function () {
+            return new Migrator(Config::get('api-migrations'));
+        });
+
+        $this->app->alias(Migrator::class, 'api-migrations');
+
+        $this->app->bind('getApiMigrations', function () {
             $cacheFile = base_path(self::REQUEST_MIGRATIONS_CACHE);
 
             if (File::exists($cacheFile)) {

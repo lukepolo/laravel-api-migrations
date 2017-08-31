@@ -73,7 +73,7 @@ class LaravelApiMigrationsMiddleware
             return $this->versions;
         }
 
-        return $this->versions = app()->make('getRequestMigrationsVersions')->toArray();
+        return $this->versions = app()->make('getApiMigrations')->toArray();
     }
 
     /**

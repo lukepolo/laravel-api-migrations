@@ -13,14 +13,14 @@ class CacheRequestMigrationsCommand extends Command
      *
      * @var string
      */
-    protected $name = 'cache:request-migrations';
+    protected $name = 'cache:api-migrations';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Caches the request migrations for production';
+    protected $description = 'Caches the API migrations for production';
 
     /**
      * Execute the console command.
@@ -35,9 +35,9 @@ class CacheRequestMigrationsCommand extends Command
 
         File::put(
             base_path($requestMigrationsCache),
-            '<?php return '.var_export(app()->make('getRequestMigrationsVersions')->toArray(), true).';'
+            '<?php return '.var_export(app()->make('getApiMigrations')->toArray(), true).';'
         );
 
-        $this->info('Request Migrations Cached');
+        $this->info('Api Migrations Cached');
     }
 }
