@@ -5,8 +5,6 @@ namespace LukePOLO\LaravelApiMigrations;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Container\Container;
-use Illuminate\Support\Arr;
-use function strtoupper;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -49,9 +47,6 @@ class LaravelApiMigrationsMiddleware
             ->getResponse();
     }
 
-    /**
-     *
-     */
     private function setupRequest()
     {
         $user = $this->request->user();
@@ -82,18 +77,12 @@ class LaravelApiMigrationsMiddleware
         return $apiVersions ? $apiVersions->keys()->toArray() : [];
     }
 
-    /**
-     *
-     */
     private function validateRequest()
     {
         $this->validateRequestVersion();
         $this->validateResponseVersion();
     }
 
-    /**
-     *
-     */
     private function validateRequestVersion()
     {
         $requestVersion = $this->requestVersion();
@@ -105,7 +94,6 @@ class LaravelApiMigrationsMiddleware
         ) {
             throw new HttpException(400, 'The request version is invalid');
         }
-
     }
 
     /**
@@ -120,9 +108,6 @@ class LaravelApiMigrationsMiddleware
         );
     }
 
-    /**
-     *
-     */
     private function validateResponseVersion()
     {
         $responseVersion = $this->responseVersion();
@@ -134,7 +119,6 @@ class LaravelApiMigrationsMiddleware
         ) {
             throw new HttpException(400, 'The response version is invalid');
         }
-
     }
 
     /**
@@ -157,7 +141,6 @@ class LaravelApiMigrationsMiddleware
         $this->request->headers->set(config('api-migrations.headers.request-version'), $requestVersion);
     }
 
-
     /**
      * @param string $responseVersion
      */
@@ -178,9 +161,10 @@ class LaravelApiMigrationsMiddleware
     /**
      * @return mixed
      */
-    protected function getApiVersion() {
+    protected function getApiVersion()
+    {
         $routePrefix = explode('/', $this->request->route()->getPrefix());
+
         return strtoupper($routePrefix[1]);
     }
-
 }
