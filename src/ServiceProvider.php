@@ -64,8 +64,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $cacheFile = base_path(self::REQUEST_MIGRATIONS_CACHE);
 
         if (File::exists($cacheFile)) {
-            return collect(require($cacheFile))->map(function($files) {
-                return collect($files)->map(function($releases) {
+            return collect(require($cacheFile))->map(function ($files) {
+                return collect($files)->map(function ($releases) {
                     return collect($releases);
                 });
             });
