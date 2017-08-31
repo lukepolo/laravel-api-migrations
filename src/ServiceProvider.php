@@ -2,14 +2,18 @@
 
 namespace LukePOLO\LaravelApiMigrations;
 
+use function app_path;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
+use Symfony\Component\Finder\SplFileInfo;
 use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 use LukePOLO\LaravelApiMigrations\Commands\CacheRequestMigrationsCommand;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     const REQUEST_MIGRATIONS_CACHE = '/bootstrap/cache/api-migrations.php';
+
+    protected $migrationsPath;
 
     /**
      * Bootstrap the application services.
@@ -36,6 +40,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'api-migrations');
 
+        $this->migrationsPath = app_path('Http/ApiMigrations');
+
         $this->commands([
             ApiMigrationMakeCommand::class,
             CacheRequestMigrationsCommand::class,
@@ -48,42 +54,65 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->alias(Migrator::class, 'api-migrations');
 
         $this->app->bind('getApiMigrations', function () {
-            $cacheFile = base_path(self::REQUEST_MIGRATIONS_CACHE);
-
-            if (File::exists($cacheFile)) {
-                return collect(require($cacheFile));
-            }
-
-            return $this->generateRequestMigrations();
+            return $this->generateApiDetails();
         });
+
+        $cacheFile = base_path(self::REQUEST_MIGRATIONS_CACHE);
+
+        if (File::exists($cacheFile)) {
+            return collect(require($cacheFile));
+        }
     }
 
-    /**
-     * @return \Illuminate\Support\Collection|static
-     */
-    protected function generateRequestMigrations()
+    protected function generateApiDetails()
     {
-        $migrationsPath = app_path('Http/Migrations');
-
-        // We generate the class list dynamically instead of relying on the config
-        if (File::exists($migrationsPath)) {
-            return collect(File::directories($migrationsPath))
-                ->map(function ($versionDirectory) {
-                    return substr($versionDirectory, strpos($versionDirectory, 'Version_') + 8);
-                })
-                ->flip()
-                ->map(function ($value, $key) use ($migrationsPath) {
-                    $files = collect();
-
-                    foreach (File::files($migrationsPath.'/Version_'.$key) as $file) {
-                        $files->push(app()->getNamespace().'Http\Migrations\Version_'.$key.'\\'.$file->getBasename('.php'));
-                    }
-
-                    return $files;
+        if (File::exists($this->migrationsPath)) {
+            return $this->getApiVersions()
+                ->mapWithKeys(function($version) {
+                    return [
+                        $version => $this->getApiVersionReleases($version)
+                    ];
                 });
         }
 
         return collect();
+    }
+
+    protected function getApiVersions()
+    {
+        return collect(File::directories($this->migrationsPath))
+            ->map(function ($versionDirectory) {
+                return substr($versionDirectory, strpos($versionDirectory, 'V') + 1);
+            });
+    }
+
+    protected function getApiVersionReleases($version)
+    {
+        $migrationPath = $this->migrationsPath.'/V'.$version;
+        if (File::exists($migrationPath)) {
+            return collect(File::directories($migrationPath))
+                ->map(function($release) {
+                    return substr($release, strpos($release, 'Release_') + 8);
+                })
+                ->mapWithKeys(function($release) use($migrationPath) {
+                    return [
+                        $release => $this->getApiReleaseMigrations($migrationPath.'/Release_'.$release)
+                    ];
+                });
+        }
+    }
+
+    protected function getApiReleaseMigrations($release)
+    {
+        $files = collect();
+
+        foreach (File::files($release) as $file) {
+            $files->push(
+                $this->convertToNamespace($file)
+            );
+        }
+
+        return $files;
     }
 
     /**
@@ -99,4 +128,24 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 )
             ) > 0;
     }
+
+    /**
+     * @param SplFileInfo $file
+     * @return string
+     */
+    protected function convertToNamespace(SplFileInfo $file)
+    {
+        return
+            $this->app->getNamespace().
+            str_replace(
+            '/',
+            '\\',
+            str_replace(
+                app_path().'/',
+                '',
+                $file->getPath()
+            ).'/'.$file->getBasename('.php')
+        );
+    }
+
 }

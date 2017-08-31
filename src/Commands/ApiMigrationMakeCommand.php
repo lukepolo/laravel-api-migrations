@@ -9,9 +9,10 @@ use LukePOLO\LaravelApiMigrations\ServiceProvider;
 
 class ApiMigrationMakeCommand extends GeneratorCommand
 {
+    protected $release;
     protected $version;
-    protected $versions;
-
+    protected $apiDetails;
+    
     /**
      * The console command name.
      *
@@ -35,22 +36,27 @@ class ApiMigrationMakeCommand extends GeneratorCommand
     {
         File::delete(ServiceProvider::REQUEST_MIGRATIONS_CACHE);
 
-        $this->versions = app()->make('getApiMigrations')->keys();
+        $this->apiDetails = app()->make('getApiMigrations');
 
         $this->version = $this->choice(
             'Which API version would you like to publish to?',
-            $choices = $this->publishableChoices()
+            $choices = $this->publishableApiVersions()
         );
 
         if ($this->version == $choices[0]) {
-            $this->version = $this->ask('Please enter your version in Y-m-d format.', Carbon::now()->format('Y-m-d'));
+            $this->version = $this->ask('Please enter a version number :', $this->apiDetails->keys()->count() + 1);
         }
 
-        if (empty(config('request-migrations.current_version'))) {
-            $this->info('Please set your default version in your request-migrations config');
+        $this->release = $this->choice(
+            'Select a release',
+            $choices = $this->publishableApiVersionReleases($this->version)
+        );
+
+        if ($this->release == $choices[0]) {
+            $this->release = $this->ask('Please enter your release in YYYY-MM-DD format :', Carbon::now()->format('Y-m-d'));
         }
 
-        if (! preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', str_replace('_', '-', $this->version))) {
+        if (! preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', str_replace('_', '-', $this->release))) {
             $this->error('You provided a invalid date');
 
             return false;
@@ -64,14 +70,22 @@ class ApiMigrationMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function publishableChoices()
+    protected function publishableApiVersions()
     {
-        if ($this->versions) {
-            return array_merge(
-                ['<comment>Create New Version</comment>'],
-                $this->versions->toArray()
-            );
-        }
+        return array_merge(
+            ['<comment>Create New Version</comment>'],
+            $this->apiDetails->keys()->toArray()
+        );
+    }
+
+    protected function publishableApiVersionReleases(int $version) {
+
+        $release = $this->apiDetails->get($version);
+
+        return array_merge(
+            ['<comment>Create New Release</comment>'],
+            $release ? $release->keys()->toArray() : []
+        );
     }
 
     /**
@@ -81,7 +95,7 @@ class ApiMigrationMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/../../stubs/migration.stub';
+        return __DIR__ . '/stubs/migration.stub';
     }
 
     /**
@@ -93,6 +107,7 @@ class ApiMigrationMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Http\Migrations\Version_'.str_replace('-', '_', $this->version);
+        return $rootNamespace . '\Http\ApiMigrations\V'.$this->version.'\Release_'.str_replace('-', '_', $this->release);
     }
+
 }

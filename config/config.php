@@ -11,9 +11,8 @@ return [
     |
     */
 
-    'headers'         => [
+    'headers' => [
         'api-version'  => 'x-api-version',
-        'current-version'  => 'x-api-current-version',
     ],
 
     /*
@@ -26,6 +25,6 @@ return [
     |
     */
 
-    'current_version' => '',
+    'current_version' => '1',
 
 ];
