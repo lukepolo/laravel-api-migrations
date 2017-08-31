@@ -22,7 +22,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             ], 'config');
         }
 
-        if (!$this->migrationHasAlreadyBeenPublished()) {
+        if (! $this->migrationHasAlreadyBeenPublished()) {
             $this->publishes([
                 __DIR__.'/database/migrations/add_api_version_to_users_table.php.stub' => database_path('migrations/'.date('Y_m_d_His').'_add_api_version_to_users_table.php'),
             ], 'migrations');
@@ -47,16 +47,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             CacheRequestMigrationsCommand::class,
         ]);
 
-        $this->app->bind('getRequestMigrationsVersions', function() {
-
+        $this->app->bind('getRequestMigrationsVersions', function () {
             $cacheFile = base_path(self::REQUEST_MIGRATIONS_CACHE);
 
-            if(File::exists($cacheFile)) {
+            if (File::exists($cacheFile)) {
                 return collect(require($cacheFile));
             }
 
             return $this->generateRequestMigrations();
-
         });
     }
 
@@ -68,23 +66,20 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $migrationsPath = app_path('Http/Migrations');
 
         // We generate the class list dynamically instead of relying on the config
-        if(File::exists($migrationsPath)) {
-
+        if (File::exists($migrationsPath)) {
             return collect(File::directories($migrationsPath))
-                ->map(function($versionDirectory) {
+                ->map(function ($versionDirectory) {
                     return substr($versionDirectory, strpos($versionDirectory, 'Version_') + 8);
                 })
                 ->flip()
-                ->map(function($value, $key) use($migrationsPath) {
-
+                ->map(function ($value, $key) use ($migrationsPath) {
                     $files = collect();
 
-                    foreach(File::files($migrationsPath.'/Version_'.$key) as $file) {
+                    foreach (File::files($migrationsPath.'/Version_'.$key) as $file) {
                         $files->push(app()->getNamespace().'Http\Migrations\Version_'.$key.'\\'.$file->getBasename('.php'));
                     }
 
                     return $files;
-
                 });
         }
 
