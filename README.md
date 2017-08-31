@@ -1,3 +1,9 @@
+This package was original was build by Tom Schlick, but wanted a more out of the box 
+experience with convention over configuration for the user 
+
+You can find that here : 
+https://github.com/tomschlick/request-migrations
+
 # HTTP Request Migrations
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/tomschlick/request-migrations.svg?style=flat-square)](https://packagist.org/packages/tomschlick/request-migrations)
@@ -26,7 +32,7 @@ If you are using an earlier version of Laravel or have autoloading disabled you 
 [
 	'providers' => [
 		...
-		\LukePOLO\LaravelApiMigrations\RequestMigrationsMiddleware::class,
+		\TomSchlick\RequestMigrations\RequestMigrationsMiddleware::class,
 		...
 	],
 	
@@ -34,7 +40,7 @@ If you are using an earlier version of Laravel or have autoloading disabled you 
 	
 	'aliases' => [
 		...
-		'RequestMigrations' => '\LukePOLO\LaravelApiMigrations\Facades\RequestMigrations::class,
+		'RequestMigrations' => '\TomSchlick\RequestMigrations\Facades\RequestMigrations::class,
 		...
 	],
 ]	
@@ -46,10 +52,12 @@ If you are using an earlier version of Laravel or have autoloading disabled you 
 Add the middleware to your Http Kernel `app/Http/Kernel.php`.
 
 ```php
-protected $middleware = [
-	\LukePOLO\LaravelApiMigrations\RequestMigrationsMiddleware::class,
+protected $middlewareGroups = [
+        'api' => [
+            '....',
+	        \TomSchlick\RequestMigrations\RequestMigrationsMiddleware::class,
+        ];
 ];
-
 ```
 
 ### Configuration
@@ -57,7 +65,7 @@ protected $middleware = [
 Run the following Artisan command to publish the package configuration to `config/request-migrations.php`.
 
 ```bash
-php artisan vendor:publish --provider="LukePOLO\LaravelApiMigrations\RequestMigrationsServiceProvider"
+php artisan vendor:publish --provider="TomSchlick\RequestMigrations\RequestMigrationsServiceProvider"
 ```
 
 ## Usage
@@ -70,13 +78,21 @@ You can generate a new request migration using the Artisan CLI.
 php artisan make:request-migration ExampleMigration
 
 ```
+The command will generate a request migration and publish it to `App/Http/Migrations/Version_YYYY_MM_DD/*`.
 
-The command will generate a request migration and publish it to `App/Http/Migrations/*`.
+### Caching Migrations
+
+Once you move to prod you should cache the results
+
+```shell
+php artisan cache:request-migrations
+
+```
 
 ### Override the Versions
 
 ```php
-use LukePOLO\LaravelApiMigrations\Facades\RequestMigrations;
+use TomSchlick\RequestMigrations\Facades\RequestMigrations;
 
 // set both response & request versions
 RequestMigrations::setVersion('2017-01-01')
