@@ -45,7 +45,7 @@ class Migrator
 
         $this->currentVersion = Arr::get($config, 'current_version');
 
-        if(empty($this->currentVersion)) {
+        if (empty($this->currentVersion)) {
             $this->currentVersion = $this->versions->keys()->first();
         }
     }
@@ -179,7 +179,7 @@ class Migrator
      */
     public function neededMigrations($migrationVersion) : array
     {
-        if(empty($migrationVersion)) {
+        if (empty($migrationVersion)) {
             return [];
         }
 

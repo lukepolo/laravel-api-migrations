@@ -4,7 +4,6 @@ namespace LukePOLO\LaravelApiMigrations;
 
 use Closure;
 use Illuminate\Http\Request;
-use function array_key_exists;
 use Illuminate\Container\Container;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -30,7 +29,7 @@ class LaravelApiMigrationsMiddleware
 
         $this->currentVersion = $this->cleanVersion(config('request-migrations.current_version'));
 
-        if($request->user() && $request->user()->api_version) {
+        if ($request->user() && $request->user()->api_version) {
             $this->setRequestVersion($request->user()->api_version);
             $this->setResponseVersion($request->user()->api_version);
         }
@@ -51,7 +50,6 @@ class LaravelApiMigrationsMiddleware
             $responseVersion < $this->currentVersion &&
             ! array_key_exists($responseVersion, $this->versions())
         ) {
-
             throw new HttpException(400, 'The response version is invalid');
         }
 
@@ -71,7 +69,7 @@ class LaravelApiMigrationsMiddleware
      */
     private function versions() : array
     {
-        if($this->versions) {
+        if ($this->versions) {
             return $this->versions;
         }
 
