@@ -5,8 +5,8 @@ namespace LukePOLO\LaravelApiMigrations\Tests;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as Orchestra;
-use LukePOLO\LaravelApiMigrations\LaravelApiMigrationsMiddleware;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
+use LukePOLO\LaravelApiMigrations\LaravelApiMigrationsMiddleware;
 use LukePOLO\LaravelApiMigrations\Tests\Migrations\GroupNameMigration;
 
 abstract class TestCase extends Orchestra
