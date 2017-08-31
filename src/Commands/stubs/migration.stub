@@ -4,9 +4,9 @@ namespace DummyNamespace;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use LukePOLO\LaravelApiMigrations\RequestMigration;
+use LukePOLO\LaravelApiMigrations\ApiMigration;
 
-class DummyClass extends RequestMigration
+class DummyClass extends ApiMigration
 {
     /**
      * Migrate the request for the application to "read".
