@@ -49,7 +49,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             return new Migrator;
         });
 
-        $this->app->alias(Migrator::class, 'api-migrations');
+        $this->app->alias(Migrator::class, 'laravel-api-migrations');
 
         $this->app->singleton('getApiDetails', function () {
             return $this->generateApiDetails();
@@ -64,7 +64,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $cacheFile = base_path(self::REQUEST_MIGRATIONS_CACHE);
 
         if (File::exists($cacheFile)) {
-            return collect(require($cacheFile));
+            return collect(require($cacheFile))->map(function($files) {
+                return collect($files)->map(function($releases) {
+                    return collect($releases);
+                });
+            });
         }
 
         if (File::exists($this->migrationsPath)) {
