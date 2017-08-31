@@ -1,17 +1,23 @@
 {
-    "name" : "tomschlick/request-migrations",
-    "description" : "HTTP Request Migrations",
+    "name" : "lukepolo/laravel-api-migrations",
+    "description" : "Migrations for your API",
     "keywords" : [
         "requests",
         "request-migrations",
         "http",
         "migrations",
         "middleware",
-        "laravel"
+        "laravel",
+        "api-migrations"
     ],
-    "homepage" : "https://github.com/tomschlick/request-migrations",
+    "homepage" : "https://github.com/lukepolo/laravel-api-migrations",
     "license" : "MIT",
     "authors" : [
+        {
+            "name" : "Luke Policinski",
+            "email" : "luke@lukepolo.com",
+            "homepage" : "https://lukepolo.com"
+        },
         {
             "name" : "Tom Schlick",
             "email" : "tom@schlick.email",
@@ -31,12 +37,12 @@
     },
     "autoload" : {
         "psr-4" : {
-            "TomSchlick\\RequestMigrations\\" : "src"
+            "LukePOLO\\LaravelApiMigrations\\" : "src"
         }
     },
     "autoload-dev" : {
         "psr-4" : {
-            "TomSchlick\\RequestMigrations\\Tests\\" : "tests"
+            "LukePOLO\\LaravelApiMigrations\\Tests\\" : "tests"
         }
     },
     "scripts" : {
@@ -48,10 +54,10 @@
     "extra" : {
         "laravel" : {
             "providers" : [
-                "TomSchlick\\RequestMigrations\\RequestMigrationsServiceProvider"
+                "LukePOLO\\LaravelApiMigrations\\RequestMigrationsServiceProvider"
             ],
             "aliases" : {
-                "RequestMigrations": "TomSchlick\\RequestMigrations\\Facades\\RequestMigrations"
+                "RequestMigrations": "LukePOLO\\LaravelApiMigrations\\Facades\\RequestMigrations"
             }
         }
     }
