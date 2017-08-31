@@ -48,12 +48,6 @@ class ApiMigrationMakeCommand extends GeneratorCommand
             $this->version = $this->ask('Please enter a version number :', $this->apiDetails->keys()->count() + 1);
         }
 
-        if(!is_numeric($this->version)) {
-            $this->error('You provided a invalid version number');
-
-            return false;
-        }
-
         $this->release = $this->choice(
             'Select a release',
             $choices = $this->publishableApiVersionReleases($this->version)
