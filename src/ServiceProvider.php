@@ -3,7 +3,6 @@
 namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Config;
 use Symfony\Component\Finder\SplFileInfo;
 use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 use LukePOLO\LaravelApiMigrations\Commands\CacheRequestMigrationsCommand;
@@ -47,7 +46,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         ]);
 
         $this->app->singleton(Migrator::class, function () {
-            return new Migrator(Config::get('api-migrations'));
+            return new Migrator;
         });
 
         $this->app->alias(Migrator::class, 'api-migrations');
@@ -57,6 +56,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
     }
 
+    /**
+     * @return \Illuminate\Support\Collection|static
+     */
     protected function generateApiDetails()
     {
         $cacheFile = base_path(self::REQUEST_MIGRATIONS_CACHE);
@@ -77,6 +79,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         return collect();
     }
 
+    /**
+     * @return static
+     */
     protected function getApiVersions()
     {
         return collect(File::directories($this->migrationsPath))
@@ -85,6 +90,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             });
     }
 
+    /**
+     * @param $version
+     * @return static
+     */
     protected function getApiVersionReleases($version)
     {
         $migrationPath = $this->migrationsPath.'/'.$version;
@@ -101,6 +110,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         }
     }
 
+    /**
+     * @param $release
+     * @return \Illuminate\Support\Collection
+     */
     protected function getApiReleaseMigrations($release)
     {
         $files = collect();

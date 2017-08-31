@@ -2,7 +2,6 @@
 
 namespace LukePOLO\LaravelApiMigrations;
 
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,16 +32,6 @@ class Migrator
     protected $config;
 
     /**
-     * Migrator constructor.
-     *
-     * @param array $config
-     */
-    public function __construct(array $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
      * Set the request from the request headers.
      *
      * @param Request $request
@@ -51,6 +40,10 @@ class Migrator
     public function setRequest(Request $request): Migrator
     {
         $this->request = $request;
+
+        $this->requestVersion = $this->requestVersion ?: $request->header(config('api-migrations.headers.request-version'));
+        $this->responseVersion = $this->responseVersion ?: $request->header(config('api-migrations.headers.response-version'));
+        $this->responseVersion = $this->currentVersion ?: $request->header(config('api-migrations.headers.current-version'));
 
         return $this;
     }
@@ -62,17 +55,6 @@ class Migrator
     public function setReleases($releases): Migrator
     {
         $this->releases = $releases;
-
-        return $this;
-    }
-
-    /**
-     * @param $currentVersion
-     * @return Migrator
-     */
-    public function setCurrentVersion($currentVersion): Migrator
-    {
-        $this->currentVersion= $currentVersion;
 
         return $this;
     }
@@ -98,7 +80,7 @@ class Migrator
      */
     public function processRequestMigrations() : Request
     {
-        Collection::make($this->neededMigrations($this->requestVersion))
+        $this->neededMigrations($this->requestVersion)
             ->transform(function ($migrations) {
                 return Collection::make($migrations)->flatten();
             })
@@ -135,25 +117,27 @@ class Migrator
     }
 
     /**
+     * @return Response
+     */
+    public function getResponse()
+    {
+        $this->setResponseHeaders();
+
+        return $this->response;
+    }
+
+    /**
      * Set the API Response Headers.
      *
      * @return $this
      */
-    public function setResponseHeaders()
+    private function setResponseHeaders()
     {
-        $this->response->headers->set(Arr::get($this->config, 'headers.current-version'), $this->currentVersion, true);
-        $this->response->headers->set(Arr::get($this->config, 'headers.request-version'), $this->requestVersion, true);
-        $this->response->headers->set(Arr::get($this->config, 'headers.response-version'), $this->responseVersion, true);
+        $this->response->headers->set(config('api-versions.headers.current-version'), $this->currentVersion, true);
+        $this->response->headers->set(config('api-versions.headers.request-version'), $this->requestVersion, true);
+        $this->response->headers->set(config('api-versions.headers.response-version'), $this->responseVersion, true);
 
         return $this;
-    }
-
-    /**
-     * @return \Illuminate\Http\Response
-     */
-    public function getResponse()
-    {
-        return $this->response;
     }
 
     /**
@@ -161,16 +145,16 @@ class Migrator
      *
      * @param $migrationVersion string The migration version to check migrations against
      *
-     * @return array
+     * @return Collection
      */
-    public function neededMigrations($migrationVersion) : array
+    private function neededMigrations($migrationVersion) : Collection
     {
         if (empty($migrationVersion)) {
-            return [];
+            return collect();
         }
 
-        return $this->releases
-            ->reject(function ($classList, $version) use ($migrationVersion) {
+        return collect($this->releases)
+            ->reject(function ($version) use ($migrationVersion) {
                 return $version < $migrationVersion;
             })
             ->filter(function ($classList) {
@@ -179,6 +163,6 @@ class Migrator
                         return $this->request->fullUrlIs($path);
                     });
                 })->isNotEmpty();
-            })->toArray();
+            });
     }
 }
