@@ -5,7 +5,6 @@ namespace LukePOLO\LaravelApiMigrations\Commands;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Console\GeneratorCommand;
-use function is_numeric;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
 
 class ApiMigrationMakeCommand extends GeneratorCommand
