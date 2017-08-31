@@ -28,21 +28,15 @@ This package supports Laravel 5.5 autoloading so the service provider and facade
 If you are using an earlier version of Laravel or have autoloading disabled you need to add the service provider and facade to `config/app.php`.
 
 ```php
+'providers' => [
+    \LukePOLO\LaravelApiMigrations\ServiceProvider::class,
+]
+```
 
-[
-	'providers' => [
-		...
-		\LukePOLO\LaravelApiMigrations\ServiceProvider::class,
-	],
-	
-	...
-	
-	'aliases' => [
-		...
-		'LaravelApiMigrations' => '\LukePOLO\LaravelApiMigrations\Facades\LaravelApiMigrations::class,
-	],
-]	
-	
+```php
+'aliases' => [
+    'LaravelApiMigrations' => '\LukePOLO\LaravelApiMigrations\Facades\LaravelApiMigrations::class,
+]
 ```
 
 ### Middleware
