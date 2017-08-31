@@ -4,10 +4,10 @@ namespace LukePOLO\LaravelApiMigrations\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class RequestMigrations extends Facade
+class LaravelApiMigrations extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'request-migrations';
+        return 'laravel-api-migrations';
     }
 }

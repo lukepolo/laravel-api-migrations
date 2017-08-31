@@ -4,9 +4,9 @@ namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
-use LukePOLO\LaravelApiMigrations\Commands\RequestMigrationMakeCommand;
+use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 
-class RequestMigrationsServiceProvider extends ServiceProvider
+class ServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -33,6 +33,6 @@ class RequestMigrationsServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'request-migrations');
 
-        $this->commands([RequestMigrationMakeCommand::class]);
+        $this->commands([ApiMigrationMakeCommand::class]);
     }
 }

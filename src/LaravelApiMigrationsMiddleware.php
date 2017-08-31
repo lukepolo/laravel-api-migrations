@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class RequestMigrationsMiddleware
+class LaravelApiMigrationsMiddleware
 {
     /**
      * @param \Illuminate\Http\Request $request

@@ -5,7 +5,7 @@ namespace LukePOLO\LaravelApiMigrations;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class RequestMigration
+abstract class ApiMigration
 {
     /**
      * Migrate the request for the application to "read".

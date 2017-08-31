@@ -4,21 +4,21 @@ namespace LukePOLO\LaravelApiMigrations\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
-class RequestMigrationMakeCommand extends GeneratorCommand
+class ApiMigrationMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'make:request-migration';
+    protected $name = 'make:api-migration';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new request migration';
+    protected $description = 'Create a new api migration';
 
     /**
      * Execute the console command.

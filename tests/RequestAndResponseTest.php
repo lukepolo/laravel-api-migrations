@@ -3,7 +3,7 @@
 namespace LukePOLO\LaravelApiMigrations\Tests;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use LukePOLO\LaravelApiMigrations\Facades\RequestMigrations;
+use LukePOLO\LaravelApiMigrations\Facades\LaravelApiMigrations;
 
 class RequestAndResponseTest extends TestCase
 {
@@ -68,7 +68,7 @@ class RequestAndResponseTest extends TestCase
     /** @test */
     public function request_and_response_versions_can_be_manually_set()
     {
-        RequestMigrations::setVersion('2017-04-04');
+        LaravelApiMigrations::setVersion('2017-04-04');
 
         $response = $this->get('/users/show', [
             'x-api-request-version'  => '2017-01-01',
@@ -90,7 +90,7 @@ class RequestAndResponseTest extends TestCase
     /** @test */
     public function response_versions_can_be_manually_set()
     {
-        RequestMigrations::setResponseVersion('2017-01-01');
+        LaravelApiMigrations::setResponseVersion('2017-01-01');
 
         $response = $this->get('/users/show', [
             'x-api-request-version'  => '2017-01-01',
@@ -110,7 +110,7 @@ class RequestAndResponseTest extends TestCase
     /** @test */
     public function request_versions_can_be_manually_set()
     {
-        RequestMigrations::setRequestVersion('2017-01-01');
+        LaravelApiMigrations::setRequestVersion('2017-01-01');
 
         /* @TODO we should add a POST endpoint and migration to test request transformations */
         $response = $this->get('/users/show', [

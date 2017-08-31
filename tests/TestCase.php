@@ -5,8 +5,8 @@ namespace LukePOLO\LaravelApiMigrations\Tests;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as Orchestra;
-use LukePOLO\LaravelApiMigrations\RequestMigrationsMiddleware;
-use LukePOLO\LaravelApiMigrations\RequestMigrationsServiceProvider;
+use LukePOLO\LaravelApiMigrations\LaravelApiMigrationsMiddleware;
+use LukePOLO\LaravelApiMigrations\ServiceProvider;
 use LukePOLO\LaravelApiMigrations\Tests\Migrations\GroupNameMigration;
 
 abstract class TestCase extends Orchestra
@@ -27,7 +27,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            RequestMigrationsServiceProvider::class,
+            ServiceProvider::class,
         ];
     }
 
@@ -105,6 +105,6 @@ abstract class TestCase extends Orchestra
 
     protected function setUpMiddleware()
     {
-        $this->app[Kernel::class]->pushMiddleware(RequestMigrationsMiddleware::class);
+        $this->app[Kernel::class]->pushMiddleware(LaravelApiMigrationsMiddleware::class);
     }
 }
