@@ -5,6 +5,7 @@ namespace LukePOLO\LaravelApiMigrations\Commands;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Console\GeneratorCommand;
+use function is_numeric;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
 
 class ApiMigrationMakeCommand extends GeneratorCommand
@@ -47,6 +48,14 @@ class ApiMigrationMakeCommand extends GeneratorCommand
             $this->version = $this->ask('Please enter a version number :', $this->apiDetails->keys()->count() + 1);
         }
 
+        $this->version = str_replace('V', '', $this->version);
+
+        if(!is_numeric($this->version)) {
+            $this->error('You provided a invalid version number');
+
+            return false;
+        }
+
         $this->release = $this->choice(
             'Select a release',
             $choices = $this->publishableApiVersionReleases($this->version)
@@ -80,7 +89,7 @@ class ApiMigrationMakeCommand extends GeneratorCommand
 
     protected function publishableApiVersionReleases(int $version)
     {
-        $release = $this->apiDetails->get($version);
+        $release = $this->apiDetails->get('V'.$version);
 
         return array_merge(
             ['<comment>Create New Release</comment>'],
