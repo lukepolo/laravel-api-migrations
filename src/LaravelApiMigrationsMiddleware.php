@@ -55,8 +55,7 @@ class LaravelApiMigrationsMiddleware
     {
         $user = $this->request->user();
 
-        if(empty($this->getVersion())) {
-
+        if (empty($this->getVersion())) {
             $currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
 
             if ($user) {
@@ -64,7 +63,6 @@ class LaravelApiMigrationsMiddleware
                     $this->setVersion($user->api_version);
                 } else {
                     if (! empty($currentVersion) && config('api-migrations.version_pinning')) {
-
                         $user->update([
                             'api_version' => $currentVersion,
                         ]);
