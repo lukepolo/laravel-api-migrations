@@ -48,6 +48,7 @@ You have a couple of choices where to put this, recommenced under the api middle
 ```php
 protected $middlewareGroups = [
     'api' => [
+        ...
         \LukePOLO\LaravelApiMigrations\LaravelApiMigrationsMiddleware::class,
     ];
 ]
