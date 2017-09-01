@@ -17,13 +17,10 @@ You write these incrementing migrations to convert your request/responses go bac
 
 ## Installation
 
-You can install the package via composer:
-
-### Installation via Composer
-
 ```bash
 composer require lukepolo/laravel-api-migrations
 ```
+
 ### Service Provider & Facade
 
 This package supports Laravel 5.5 autoloading so the service provider and facade will be loaded automatically. 
@@ -72,8 +69,8 @@ You can generate a new request migration using the Artisan CLI.
 
 ```shell
 php artisan make:api-migration ExampleMigration
-
 ```
+
 The command will generate a request migration and publish it to `App/Http/ApiMigrations/V*/Release_YYYY_MM_DD/*`.
 
 ### Caching Migrations
