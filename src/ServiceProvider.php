@@ -3,7 +3,6 @@
 namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\File;
-use function substr;
 use Symfony\Component\Finder\SplFileInfo;
 use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 use LukePOLO\LaravelApiMigrations\Commands\CacheRequestMigrationsCommand;
@@ -37,7 +36,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'api-migrations');
 
         $this->commands([

@@ -128,7 +128,7 @@ class LaravelApiMigrationsMiddleware
      */
     protected function getApiVersion()
     {
-        if($this->request->route()) {
+        if ($this->request->route()) {
             $routePrefix = explode('/', $this->request->route()->getPrefix());
 
             if (isset($routePrefix[1])) {
