@@ -43,7 +43,6 @@ abstract class TestCase extends Orchestra
 
     protected function setupConfig($app)
     {
-
         $app['config']->set('api-migrations', [
 
             'path' => 'Http/ApiMigrations',

@@ -14,7 +14,7 @@ trait ApiRequestHeadersTrait
     {
         $version = $this->request->header(config('api-migrations.headers.current-version'));
 
-        if($clean) {
+        if ($clean) {
             return $this->cleanVersion($version);
         }
 
@@ -40,7 +40,7 @@ trait ApiRequestHeadersTrait
     {
         $version = $this->request->header(config('api-migrations.headers.request-version'));
 
-        if($clean) {
+        if ($clean) {
             return $this->cleanVersion($version);
         }
 
@@ -65,7 +65,7 @@ trait ApiRequestHeadersTrait
     {
         $version = $this->request->header(config('api-migrations.headers.response-version'), '');
 
-        if($clean) {
+        if ($clean) {
             return $this->cleanVersion($version);
         }
 
