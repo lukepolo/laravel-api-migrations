@@ -113,6 +113,7 @@ php artisan vendor:publish --provider="LukePOLO\LaravelApiMigrations\ServiceProv
 Run the migration to enable version pinning. Then once your user hits your api for the first time it will set the most current version. 
 
 !!! NOTE !!!
+
 You must also make the column `api_version` fillable in your `User` model!
 
 ## Changelog
