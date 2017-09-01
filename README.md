@@ -61,7 +61,7 @@ protected $middlewareGroups = [
 Run the following Artisan command to publish the package configuration to `config/request-migrations.php`.
 
 ```bash
-php artisan vendor:publish --provider="LukePOLO\LaravelApiMigrations\ServiceProvider"
+php artisan vendor:publish --provider="LukePOLO\LaravelApiMigrations\ServiceProvider" --tag=config
 ```
 
 ## Usage
@@ -104,6 +104,11 @@ Example : -- link to gist --
 ### User Version Pinning
 With version pinning you can automatically keep users to that API and allow them to upgrade to your latest version at their
 convince.
+
+
+```bash
+php artisan vendor:publish --provider="LukePOLO\LaravelApiMigrations\ServiceProvider" --tag=migrations
+```
 
 Run the migration to enable version pinning. Then once your user hits your api for the first time it will set the most current version. 
 
