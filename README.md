@@ -103,16 +103,13 @@ Example : -- link to gist --
 
 ### User Version Pinning
 With version pinning you can automatically keep users to that API and allow them to upgrade to your latest version at their
-convince.
-
+convince. Once once your user hits your api for the first time it will set the most current version.
 
 ```bash
 php artisan vendor:publish --provider="LukePOLO\LaravelApiMigrations\ServiceProvider" --tag=migrations
 ```
 
-Run the migration to enable version pinning. Then once your user hits your api for the first time it will set the most current version. 
-
-!!! NOTE !!!
+!!!! NOTE !!!!!
 
 You must also make the column `api_version` fillable in your `User` model!
 
