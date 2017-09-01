@@ -3,7 +3,6 @@
 namespace LukePOLO\LaravelApiMigrations\Tests;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use LukePOLO\LaravelApiMigrations\Facades\LaravelApiMigrations;
 
 class RequestAndResponseTest extends TestCase
 {
@@ -19,7 +18,6 @@ class RequestAndResponseTest extends TestCase
                 'lastname'  => 'Schrute',
             ],
         ]);
-        
     }
 
     /** @test */
@@ -47,5 +45,4 @@ class RequestAndResponseTest extends TestCase
             'Api-Version'  => '2016-03-03',
         ])->json();
     }
-
 }
