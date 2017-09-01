@@ -74,7 +74,7 @@ You can generate a new request migration using the Artisan CLI.
 php artisan make:api-migration ExampleMigration
 ```
 
-The command will generate a request migration and publish it to `App/Http/ApiMigrations/V*/Release_YYYY_MM_DD/*`.
+The command will generate a request migration and publish it to `App/Http/ApiMigrations/V{VersionNumber}/Release_{YYYY_MM_DD}/{MigrationName}`.
 
 ### Caching Migrations
 
