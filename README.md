@@ -1,16 +1,15 @@
 # Laravel API Migrations
-
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lukepolo/laravel-api-migrations.svg?style=flat-square)](https://packagist.org/packages/lukepolo/laravel-api-migrations)
 [![Build Status](https://img.shields.io/travis/lukepolo/laravel-api-migrations/master.svg?style=flat-square)](https://travis-ci.org/lukepolo/laravel-api-migrations)
 [![StyleCI](https://styleci.io/repos/102003593/shield)](https://styleci.io/repos/102003593)
+
+This package is based on the [API versioning scheme used at Stripe](https://stripe.com/blog/api-versioning). Users pass a version header and you automatically migrate the request & response data to match the current version of your code.
 
 You can update your API without worrying of users applications breaking with API Migrations. You write these  
 migrations to convert your request/responses in small increments go back in time and allow your users applications to work flawlessly.
 
 With version pinning you can automatically keep users to that API and allow them to upgrade to your latest version at their
 convince.
-
-This package is based on the [API versioning scheme used at Stripe](https://stripe.com/blog/api-versioning). Users pass a version header and you automatically migrate the request & response data to match the current version of your code.
 
 #### Features :
 * User Pinning
