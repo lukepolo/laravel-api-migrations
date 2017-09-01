@@ -29,12 +29,14 @@ If you are using an earlier version of Laravel or have autoloading disabled you 
 
 ```php
 'providers' => [
+    ...
     \LukePOLO\LaravelApiMigrations\ServiceProvider::class,
 ]
 ```
 
 ```php
 'aliases' => [
+    ...
     'LaravelApiMigrations' => \LukePOLO\LaravelApiMigrations\Facades\LaravelApiMigrations::class,
 ]
 ```
