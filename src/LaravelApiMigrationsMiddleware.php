@@ -91,13 +91,13 @@ class LaravelApiMigrationsMiddleware
         return $apiVersions ? $apiVersions : collect();
     }
 
-    private function validateRequest() : void
+    private function validateRequest()
     {
         $this->validateRequestVersion();
         $this->validateResponseVersion();
     }
 
-    private function validateRequestVersion() : void
+    private function validateRequestVersion()
     {
         $requestVersion = $this->getRequestVersion();
 
@@ -110,7 +110,7 @@ class LaravelApiMigrationsMiddleware
         }
     }
 
-    private function validateResponseVersion() : void
+    private function validateResponseVersion()
     {
         $responseVersion = $this->getResponseVersion();
 
