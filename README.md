@@ -101,6 +101,9 @@ To use a different version of your api just attach a header :
 
 Example : -- link to gist --
 
+### Versioning
+WIP - Need to solve 1 minor issue then ill write up about this. 
+
 ### User Version Pinning
 With version pinning you can automatically keep users to that API and allow them to upgrade to your latest version at their
 convince. Once once your user hits your api for the first time it will set the most current version.
