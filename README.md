@@ -35,7 +35,7 @@ If you are using an earlier version of Laravel or have autoloading disabled you 
 
 ```php
 'aliases' => [
-    'LaravelApiMigrations' => '\LukePOLO\LaravelApiMigrations\Facades\LaravelApiMigrations::class,
+    'LaravelApiMigrations' => \LukePOLO\LaravelApiMigrations\Facades\LaravelApiMigrations::class,
 ]
 ```
 
