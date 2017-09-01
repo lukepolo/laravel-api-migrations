@@ -5,14 +5,13 @@
 
 This package is based on the [API versioning scheme used at Stripe](https://stripe.com/blog/api-versioning). Users pass a version header and you automatically migrate the request & response data to match the current version of your code.
 
-You can update your API without worrying of users applications breaking with API Migrations. You write these  
-migrations to convert your request/responses in small increments go back in time and allow your users applications to work flawlessly.
+## TLDR 
+You can update your API without worrying of users applications breaking with API Migrations. 
 
-With version pinning you can automatically keep users to that API and allow them to upgrade to your latest version at their
-convince.
+You write these incrementing migrations to convert your request/responses go back in time to allow your users applications to work flawlessly.
 
 #### Features :
-* User Pinning
+* User Version Pinning
 * Major API Versioning Supported
 * Convention Supplied with artisan commands
 
@@ -102,10 +101,14 @@ To use a different version of your api just attach a header :
 
 Example : -- link to gist --
 
-### Pinning Versions to Users
+### User Version Pinning
+With version pinning you can automatically keep users to that API and allow them to upgrade to your latest version at their
+convince.
 
-You can auto pin versions to your users on their first hit to your api by enabling in the config. You must also
-make the column `api_version` fillable in your `User` model!
+Run the migration to enable version pinning. Then once your user hits your api for the first time it will set the most current version. 
+
+!!! NOTE !!!
+You must also make the column `api_version` fillable in your `User` model!
 
 ## Changelog
 
