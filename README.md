@@ -81,26 +81,27 @@ Once you move to prod you should cache the results
 php artisan cache:api-migrations
 ```
 
+### Making HTTP Requests
+By default when making a request to your API it will not run any migrations.
+
+To use a different version of your api just attach a header :
+
+```
+    'Api-Version' : '2017-08-31'  
+```
+
+### Writing the API migrations
+
+`migrateRequest` method : This is used to convert your request to be valid to your most current route
+
+`migrateResponse` method : This is used to convert your response to what you should expect for that version
+
+Example : -- link to gist --
+
 ### Pinning Versions to Users
 
 You can auto pin versions to your users on their first hit to your api by enabling in the config. You must also
 make the column `api_version` fillable in your `User` model!
-
-### Override the Versions
-
-```php
-use LukePolo\LaravelApiMigrations\Facades\LaravelApiMigrations;
-
-// set both response & request versions
-LaravelApiMigrations::setVersion('2017-01-01')
-
-// set the request version
-LaravelApiMigrations::setRequestVersion('2017-01-01')
-
-// set the response version
-LaravelApiMigrations::setResponseVersion('2017-01-01')
-
-```
 
 ## Changelog
 

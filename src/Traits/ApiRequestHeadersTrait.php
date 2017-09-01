@@ -10,9 +10,9 @@ trait ApiRequestHeadersTrait
      * @param bool $clean
      * @return string
      */
-    private function getCurrentVersion($clean = true)
+    private function getVersion($clean = true)
     {
-        $version = $this->request->header(config('api-migrations.headers.current-version'));
+        $version = $this->request->header(config('api-migrations.headers.api-version'));
 
         if ($clean) {
             return $this->cleanVersion($version);
@@ -24,75 +24,9 @@ trait ApiRequestHeadersTrait
     /**
      * @param string $requestVersion
      */
-    private function setCurrentVersion($requestVersion)
+    private function setVersion($requestVersion)
     {
-        $this->request->headers->set(
-            config('api-migrations.headers.current-version'),
-            $requestVersion
-        );
-    }
-
-    /**
-     * @param bool $clean
-     * @return string
-     */
-    private function getRequestVersion($clean = true) : string
-    {
-        $version = $this->request->header(config('api-migrations.headers.request-version'));
-
-        if ($clean) {
-            return $this->cleanVersion($version);
-        }
-
-        return $version;
-    }
-
-    /**
-     * @param string $requestVersion
-     */
-    private function setRequestVersion($requestVersion)
-    {
-        $this->request->headers->set(
-            config('api-migrations.headers.request-version'),
-            $requestVersion
-        );
-    }
-
-    /**
-     * @return string
-     */
-    private function getResponseVersion($clean = true) : string
-    {
-        $version = $this->request->header(config('api-migrations.headers.response-version'), '');
-
-        if ($clean) {
-            return $this->cleanVersion($version);
-        }
-
-        return $version;
-    }
-
-    /**
-     * @param string $responseVersion
-     */
-    private function setResponseVersion($responseVersion)
-    {
-        $this->request->headers->set(
-            config('api-migrations.headers.response-version'),
-            $responseVersion
-        );
-    }
-
-    /**
-     * @param string $version
-     * @return $this
-     */
-    public function setVersion($version)
-    {
-        $this->setRequestVersion($version);
-        $this->setResponseVersion($version);
-
-        return $this;
+        $this->request->headers->set(config('api-migrations.headers.api-version'), $requestVersion);
     }
 
     /**

@@ -39,7 +39,7 @@ class LaravelApiMigrationsMiddleware
             ->make(Migrator::class);
 
         $this->setupRequest()
-            ->validateRequest();
+            ->validateVersion();
 
         return $this->migrator->setRequest($request)
             ->setReleases($this->releases)
@@ -53,21 +53,22 @@ class LaravelApiMigrationsMiddleware
      */
     private function setupRequest() : LaravelApiMigrationsMiddleware
     {
-        $currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
-
-        $this->setCurrentVersion($currentVersion);
-
         $user = $this->request->user();
 
-        if ($user) {
-            if (! empty($user->api_version)) {
-                $this->setVersion($user->api_version);
-            } else {
-                if (! empty($currentVersion) && config('api-migrations.version_pinning')) {
-                    $user->update([
-                        'api_version' => $currentVersion,
-                    ]);
-                    $this->setVersion($currentVersion);
+        if(empty($this->getVersion())) {
+
+            $currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
+
+            if ($user) {
+                if (! empty($user->api_version)) {
+                    $this->setVersion($user->api_version);
+                } else {
+                    if (! empty($currentVersion) && config('api-migrations.version_pinning')) {
+
+                        $user->update([
+                            'api_version' => $currentVersion,
+                        ]);
+                    }
                 }
             }
         }
@@ -91,35 +92,15 @@ class LaravelApiMigrationsMiddleware
         return $apiVersions ? $apiVersions : collect();
     }
 
-    private function validateRequest()
+    private function validateVersion()
     {
-        $this->validateRequestVersion();
-        $this->validateResponseVersion();
-    }
-
-    private function validateRequestVersion()
-    {
-        $requestVersion = $this->getRequestVersion();
+        $version = $this->getVersion();
 
         if (
-            $requestVersion &&
-            $requestVersion < $this->getCurrentVersion() &&
-            ! $this->releases->keys()->contains($requestVersion)
+            $version &&
+            ! $this->releases->keys()->contains($version)
         ) {
-            throw new HttpException(400, 'The request version is invalid');
-        }
-    }
-
-    private function validateResponseVersion()
-    {
-        $responseVersion = $this->getResponseVersion();
-
-        if (
-            $responseVersion &&
-            $responseVersion < $this->getCurrentVersion() &&
-            ! $this->releases->keys()->contains($responseVersion)
-        ) {
-            throw new HttpException(400, 'The response version is invalid');
+            throw new HttpException(400, 'The version is invalid');
         }
     }
 

@@ -58,7 +58,7 @@ class Migrator
      */
     public function processRequestMigrations() : Request
     {
-        $this->neededMigrations($this->getRequestVersion())
+        $this->neededMigrations($this->getVersion())
             ->flatten()
             ->each(function ($migration) {
                 $this->request = (new $migration)->migrateRequest($this->request);
@@ -76,8 +76,8 @@ class Migrator
     {
         $this->response = $response;
 
-        $this->neededMigrations($this->getResponseVersion())
-            ->reverse()
+        $this->neededMigrations($this->getVersion())
+            ->reverse() // todo - make sure we want to reverse here
             ->flatten()
             ->each(function ($migration) {
                 $this->response = (new $migration())->migrateResponse($this->response);
@@ -102,18 +102,8 @@ class Migrator
     private function setResponseHeaders() : Migrator
     {
         $this->response->headers->set(
-            config('api-migrations.headers.current-version'),
-            $this->getCurrentVersion(false)
-        );
-
-        $this->response->headers->set(
-            config('api-migrations.headers.request-version'),
-            $this->getRequestVersion(false)
-        );
-
-        $this->response->headers->set(
-            config('api-migrations.headers.response-version'),
-            $this->getResponseVersion(false)
+            config('api-migrations.headers.api-version'),
+            $this->getVersion(false)
         );
 
         return $this;
