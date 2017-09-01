@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as Orchestra;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
 use LukePOLO\LaravelApiMigrations\LaravelApiMigrationsMiddleware;
-use LukePOLO\LaravelApiMigrations\Tests\Migrations\GroupNameMigration;
 
 abstract class TestCase extends Orchestra
 {
@@ -17,6 +16,7 @@ abstract class TestCase extends Orchestra
         $this->setupConfig($this->app);
         $this->setUpRoutes($this->app);
         $this->setUpMiddleware();
+        $this->setupApiMigrations();
     }
 
     /**
@@ -43,29 +43,22 @@ abstract class TestCase extends Orchestra
 
     protected function setupConfig($app)
     {
-        $app['config']->set('request-migrations', [
+
+        $app['config']->set('api-migrations', [
+
+            'path' => 'Http/ApiMigrations',
+
             'headers' => [
                 'current-version'  => 'x-api-current-version',
                 'request-version'  => 'x-api-request-version',
                 'response-version' => 'x-api-response-version',
             ],
 
-            'current_version' => '2017-04-04',
+            'current_versions' => [
 
-            'versions' => [
-                '2017-01-01' => [
-
-                ],
-                '2017-02-02' => [
-
-                ],
-                '2017-03-03' => [
-                    GroupNameMigration::class,
-                ],
-                '2017-04-04' => [
-
-                ],
             ],
+
+            'version_pinning' => false,
         ]);
     }
 
@@ -88,7 +81,7 @@ abstract class TestCase extends Orchestra
                     'battlestar galactica',
                 ],
             ];
-        });
+        })->name('show-users');
 
         Route::post('users', function () {
             return [
@@ -98,7 +91,7 @@ abstract class TestCase extends Orchestra
                 'title'     => request('title'),
                 'skills'    => request('skills'),
             ];
-        });
+        })->name('create-user');
 
         $app['router']->getRoutes()->refreshNameLookups();
     }
@@ -106,5 +99,10 @@ abstract class TestCase extends Orchestra
     protected function setUpMiddleware()
     {
         $this->app[Kernel::class]->pushMiddleware(LaravelApiMigrationsMiddleware::class);
+    }
+
+    protected function setupApiMigrations()
+    {
+        \File::copyDirectory(__DIR__.'/ApiMigrations', app_path().'/Http/ApiMigrations');
     }
 }

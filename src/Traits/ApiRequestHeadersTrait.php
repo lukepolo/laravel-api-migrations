@@ -7,13 +7,18 @@ trait ApiRequestHeadersTrait
     /**
      * Get the request version from the request.
      *
+     * @param bool $clean
      * @return string
      */
-    private function getCurrentVersion() : string
+    private function getCurrentVersion($clean = true)
     {
-        return $this->cleanVersion(
-            $this->request->header(config('api-migrations.headers.current-version'))
-        );
+        $version = $this->request->header(config('api-migrations.headers.current-version'));
+
+        if($clean) {
+            return $this->cleanVersion($version);
+        }
+
+        return $version;
     }
 
     /**
@@ -28,13 +33,18 @@ trait ApiRequestHeadersTrait
     }
 
     /**
+     * @param bool $clean
      * @return string
      */
-    private function getRequestVersion() : string
+    private function getRequestVersion($clean = true) : string
     {
-        return $this->cleanVersion(
-            $this->request->header(config('api-migrations.headers.request-version'))
-        );
+        $version = $this->request->header(config('api-migrations.headers.request-version'));
+
+        if($clean) {
+            return $this->cleanVersion($version);
+        }
+
+        return $version;
     }
 
     /**
@@ -51,11 +61,15 @@ trait ApiRequestHeadersTrait
     /**
      * @return string
      */
-    private function getResponseVersion() : string
+    private function getResponseVersion($clean = true) : string
     {
-        return $this->cleanVersion(
-            $this->request->header(config('api-migrations.headers.response-version'), '')
-        );
+        $version = $this->request->header(config('api-migrations.headers.response-version'), '');
+
+        if($clean) {
+            return $this->cleanVersion($version);
+        }
+
+        return $version;
     }
 
     /**

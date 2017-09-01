@@ -31,13 +31,14 @@ class LaravelApiMigrationsMiddleware
      */
     public function handle(Request $request, Closure $next) : Response
     {
+        $this->request = $request;
         $this->apiDetails = app()->make('getApiDetails');
 
         /* @var Migrator $migrator */
         $this->migrator = Container::getInstance()
             ->make(Migrator::class);
 
-        $this->setupRequest($request)
+        $this->setupRequest()
             ->validateRequest();
 
         return $this->migrator->setRequest($request)
@@ -48,14 +49,10 @@ class LaravelApiMigrationsMiddleware
     }
 
     /**
-     * @param Request $request
-     *
      * @return $this
      */
-    private function setupRequest(Request $request) : LaravelApiMigrationsMiddleware
+    private function setupRequest() : LaravelApiMigrationsMiddleware
     {
-        $this->request = $request;
-
         $currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
 
         $this->setCurrentVersion($currentVersion);
@@ -129,12 +126,14 @@ class LaravelApiMigrationsMiddleware
     /**
      * @return string
      */
-    protected function getApiVersion() : string
+    protected function getApiVersion()
     {
-        $routePrefix = explode('/', $this->request->route()->getPrefix());
+        if($this->request->route()) {
+            $routePrefix = explode('/', $this->request->route()->getPrefix());
 
-        if (isset($routePrefix[1])) {
-            return strtoupper($routePrefix[1]);
+            if (isset($routePrefix[1])) {
+                return strtoupper($routePrefix[1]);
+            }
         }
 
         return $this->apiDetails->keys()->last();

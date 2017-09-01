@@ -101,9 +101,20 @@ class Migrator
      */
     private function setResponseHeaders() : Migrator
     {
-        $this->setCurrentVersion($this->getCurrentVersion());
-        $this->setRequestVersion($this->getRequestVersion());
-        $this->setResponseVersion($this->getResponseVersion());
+        $this->response->headers->set(
+            config('api-migrations.headers.current-version'),
+            $this->getCurrentVersion(false)
+        );
+
+        $this->response->headers->set(
+            config('api-migrations.headers.request-version'),
+            $this->getRequestVersion(false)
+        );
+
+        $this->response->headers->set(
+            config('api-migrations.headers.response-version'),
+            $this->getResponseVersion(false)
+        );
 
         return $this;
     }
@@ -127,7 +138,8 @@ class Migrator
                 return $classList->filter(function ($class) {
                     return collect((new $class)->paths())
                         ->filter(function ($path) {
-                            return $this->request->fullUrlIs($path);
+                            return $this->request->fullUrlIs($path) ||
+                                $this->request->path($path);
                         })->isNotEmpty();
                 })->isNotEmpty();
             });

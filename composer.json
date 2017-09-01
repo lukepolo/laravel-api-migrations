@@ -42,7 +42,8 @@
     },
     "autoload-dev" : {
         "psr-4" : {
-            "LukePOLO\\LaravelApiMigrations\\Tests\\" : "tests"
+            "LukePOLO\\LaravelApiMigrations\\Tests\\" : "tests",
+            "App\\Http\\ApiMigrations\\" : "tests/ApiMigrations"
         }
     },
     "scripts" : {

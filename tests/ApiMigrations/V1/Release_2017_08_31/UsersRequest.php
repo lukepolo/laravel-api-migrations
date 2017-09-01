@@ -1,12 +1,12 @@
 <?php
 
-namespace LukePOLO\LaravelApiMigrations\Tests\Migrations;
+namespace App\Http\ApiMigrations\V1\Release_2017_08_31;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use LukePOLO\LaravelApiMigrations\ApiMigration;
 
-class GroupNameMigration extends ApiMigration
+class UsersRequest extends ApiMigration
 {
     /**
      * Migrate the request for the application to "read".
@@ -29,13 +29,14 @@ class GroupNameMigration extends ApiMigration
      */
     public function migrateResponse(Response $response) : Response
     {
-        $content = json_decode($response->getContent(), true);
+        $content = $response->original;
 
         $content['firstname'] = array_get($content, 'name.firstname');
         $content['lastname'] = array_get($content, 'name.lastname');
+
         unset($content['name']);
 
-        return $response->setContent(json_encode($content));
+        return response()->json($content);
     }
 
     /**
@@ -46,7 +47,7 @@ class GroupNameMigration extends ApiMigration
     public function paths() : array
     {
         return [
-            'users/show',
+            route('show-users'),
         ];
     }
 }
