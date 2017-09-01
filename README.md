@@ -10,7 +10,7 @@ You can update your API without worrying of users applications breaking with API
 
 You write these incrementing migrations to convert your request/responses go back in time to allow your users applications to work flawlessly.
 
-#### Features :
+### Features :
 * User Version Pinning
 * Major API Versioning Supported
 * Convention Supplied with artisan commands
