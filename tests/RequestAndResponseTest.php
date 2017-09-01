@@ -44,6 +44,7 @@ class RequestAndResponseTest extends TestCase
         $response->assertHeader('x-api-request-version', '2017-01-01');
         $response->assertHeader('x-api-response-version', '2017-01-01');
     }
+
 //
 //    /** @test */
 //    public function it_will_throw_an_exception_if_the_request_version_is_invalid()
