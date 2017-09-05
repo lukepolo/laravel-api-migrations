@@ -51,5 +51,4 @@ class UserPinningTest extends TestCase
 
         $response->assertHeader('Api-version', '2017-08-31');
     }
-
 }
