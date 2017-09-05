@@ -47,12 +47,11 @@ class RequestAndResponseTest extends TestCase
             'id'        => 123,
             'firstname' => 'Dwight',
             'lastname'  => 'Schrute',
-            'title'     => 'Assistant to the Regional Manager'
+            'title'     => 'Assistant to the Regional Manager',
         ]);
 
         $response->assertHeader('Api-version', '2017-08-31');
     }
-
 
     /** @test */
     public function it_will_get_a_odler_modified_user_object()
