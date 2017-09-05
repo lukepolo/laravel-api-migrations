@@ -3,6 +3,7 @@
 namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\File;
+use LukePOLO\LaravelApiMigrations\Commands\ClearCacheRequestMigrationsCommand;
 use Symfony\Component\Finder\SplFileInfo;
 use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 use LukePOLO\LaravelApiMigrations\Commands\CacheRequestMigrationsCommand;
@@ -43,6 +44,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             ApiMigrationMakeCommand::class,
             CacheRequestMigrationsCommand::class,
             ApiMigrationMakeReleaseCommand::class,
+            ClearCacheRequestMigrationsCommand::class,
         ]);
 
         $this->app->singleton(Migrator::class, function () {
@@ -73,16 +75,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             });
         }
 
-        if (File::exists($this->migrationsPath)) {
-            return $this->getApiVersions()
-                ->mapWithKeys(function ($version) {
-                    return [
-                        $version => $this->getApiVersionReleases($version),
-                    ];
-                });
-        }
-
-        return collect();
+        return $this->getApiVersions()
+            ->mapWithKeys(function ($version) {
+                return [
+                    $version => $this->getApiVersionReleases($version),
+                ];
+            });
     }
 
     /**
@@ -90,10 +88,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function getApiVersions()
     {
-        return collect(File::directories($this->migrationsPath))
-            ->map(function ($versionDirectory) {
-                return substr($versionDirectory, strpos($versionDirectory, 'V'));
-            });
+        if (File::exists($this->migrationsPath)) {
+            return collect(File::directories($this->migrationsPath))
+                ->map(function ($versionDirectory) {
+                    return substr($versionDirectory, strpos($versionDirectory, 'V'));
+                });
+        }
+
+        return collect();
     }
 
     /**
@@ -103,17 +105,16 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     protected function getApiVersionReleases($version)
     {
         $migrationPath = $this->migrationsPath.'/'.$version;
-        if (File::exists($migrationPath)) {
-            return collect(File::directories($migrationPath))
-                ->map(function ($release) {
-                    return substr($release, strpos($release, 'Release_') + 8);
-                })
-                ->mapWithKeys(function ($release) use ($migrationPath) {
-                    return [
-                        $release => $this->getApiReleaseMigrations($migrationPath.'/Release_'.$release),
-                    ];
-                });
-        }
+
+        return collect(File::directories($migrationPath))
+            ->map(function ($release) {
+                return substr($release, strpos($release, 'Release_') + 8);
+            })
+            ->mapWithKeys(function ($release) use ($migrationPath) {
+                return [
+                    $release => $this->getApiReleaseMigrations($migrationPath.'/Release_'.$release),
+                ];
+            });
     }
 
     /**

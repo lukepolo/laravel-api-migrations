@@ -71,6 +71,7 @@ class ApiMigrationMakeReleaseCommand extends GeneratorCommand
         }
 
         parent::handle();
+
     }
 
     /**
@@ -94,6 +95,16 @@ class ApiMigrationMakeReleaseCommand extends GeneratorCommand
             ['<comment>Create New Release</comment>'],
             $release ? $release->keys()->toArray() : []
         );
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return __DIR__ . '/stubs/.gitkeep.stub';
     }
 
     /**

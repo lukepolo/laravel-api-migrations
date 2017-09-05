@@ -2,26 +2,25 @@
 
 namespace LukePOLO\LaravelApiMigrations\Commands;
 
-use function base_path;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
 
-class CacheRequestMigrationsCommand extends Command
+class ClearCacheRequestMigrationsCommand extends Command
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'cache:api-migrations';
+    protected $name = 'clear:api-migrations';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Caches the API migrations for production';
+    protected $description = 'Deletes the cache for API migrations';
 
     /**
      * Execute the console command.
@@ -34,11 +33,6 @@ class CacheRequestMigrationsCommand extends Command
 
         File::delete($requestMigrationsCache);
 
-        File::put(
-            $requestMigrationsCache,
-            '<?php return '.var_export(app()->make('getApiDetails')->toArray(), true).';'
-        );
-
-        $this->info('Api Migrations Cached');
+        $this->info('Api Migrations Have Been Deleted');
     }
 }

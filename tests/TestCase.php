@@ -4,6 +4,7 @@ namespace LukePOLO\LaravelApiMigrations\Tests;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase as Orchestra;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
 use LukePOLO\LaravelApiMigrations\LaravelApiMigrationsMiddleware;
@@ -17,6 +18,7 @@ abstract class TestCase extends Orchestra
         $this->setUpRoutes($this->app);
         $this->setUpMiddleware();
         $this->setupApiMigrations();
+        Artisan::call('clear:api-migrations');
     }
 
     /**
