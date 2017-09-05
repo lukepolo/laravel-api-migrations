@@ -59,7 +59,6 @@ class LaravelApiMigrationsMiddleware
         $user = $this->request->user();
 
         if (empty($this->getVersion())) {
-
             $this->setVersion($this->currentVersion);
 
             if ($user) {
