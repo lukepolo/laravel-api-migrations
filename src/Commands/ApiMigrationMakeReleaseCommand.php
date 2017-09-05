@@ -3,11 +3,11 @@
 namespace LukePOLO\LaravelApiMigrations\Commands;
 
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Console\GeneratorCommand;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
 
-class ApiMigrationMakeReleaseCommand extends GeneratorCommand
+class ApiMigrationMakeReleaseCommand extends Command
 {
     protected $release;
     protected $version;
@@ -55,14 +55,8 @@ class ApiMigrationMakeReleaseCommand extends GeneratorCommand
             return false;
         }
 
-        $this->release = $this->choice(
-            'Select a release',
-            $choices = $this->publishableApiVersionReleases($this->version)
-        );
 
-        if ($this->release == $choices[0]) {
-            $this->release = $this->ask('Please enter your release in YYYY-MM-DD format :', Carbon::now()->format('Y-m-d'));
-        }
+        $this->release = $this->ask('Please enter your release in YYYY-MM-DD format :', Carbon::now()->format('Y-m-d'));
 
         if (! preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', str_replace('_', '-', $this->release))) {
             $this->error('You provided a invalid date');
@@ -70,7 +64,8 @@ class ApiMigrationMakeReleaseCommand extends GeneratorCommand
             return false;
         }
 
-        parent::handle();
+        File::makeDirectory($this->getPath(), 493, true, true);
+        File::put($this->getPath().'/.gitkeep', '');
     }
 
     /**
@@ -86,35 +81,8 @@ class ApiMigrationMakeReleaseCommand extends GeneratorCommand
         );
     }
 
-    protected function publishableApiVersionReleases(int $version)
+    protected function getPath()
     {
-        $release = $this->apiDetails->get('V'.$version);
-
-        return array_merge(
-            ['<comment>Create New Release</comment>'],
-            $release ? $release->keys()->toArray() : []
-        );
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__ . '/stubs/.gitkeep.stub';
-    }
-
-    /**
-     * Get the default namespace for the class.
-     *
-     * @param  string $rootNamespace
-     *
-     * @return string
-     */
-    protected function getDefaultNamespace($rootNamespace)
-    {
-        return $rootNamespace . '\Http\ApiMigrations\V'.$this->version.'\Release_'.str_replace('-', '_', $this->release);
+        return str_replace('\\', '/', $this->laravel->getNamespace().config('api-migrations.path').'/V'.$this->version.'/Release_'.str_replace('-', '_', $this->release));
     }
 }

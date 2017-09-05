@@ -115,6 +115,6 @@ class ApiMigrationMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Http\ApiMigrations\V'.$this->version.'\Release_'.str_replace('-', '_', $this->release);
+        return $rootNamespace . '\\'.str_replace('/','\\', config('api-migrations.path')).'\\V'.$this->version.'\Release_'.str_replace('-', '_', $this->release);
     }
 }
