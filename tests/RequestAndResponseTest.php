@@ -80,4 +80,22 @@ class RequestAndResponseTest extends TestCase
             'Api-Version'  => '2016-03-03',
         ])->json();
     }
+
+    /** @test */
+    public function it_will_get_version_from_path()
+    {
+        $this->markTestIncomplete();
+        $response = $this->get(route('show-users-v1'), [
+            'Api-Version'  => '2017-08-31',
+        ]);
+
+        $response->assertJson([
+            'id'        => 123,
+            'firstname' => 'Dwight',
+            'lastname'  => 'Schrute',
+            'title'     => 'Assistant to the Regional Manager',
+        ]);
+
+        $response->assertHeader('Api-version', '2017-08-31');
+    }
 }

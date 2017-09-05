@@ -3,6 +3,7 @@
 namespace LukePOLO\LaravelApiMigrations\Tests;
 
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -82,6 +83,22 @@ abstract class TestCase extends Orchestra
             ];
         })->name('show-users');
 
+        Route::get('v1/users/show', function () {
+            return [
+                'id'     => 123,
+                'name'   => [
+                    'firstname' => 'Dwight',
+                    'lastname'  => 'Schrute',
+                ],
+                'title'  => 'Assistant to the Regional Manager',
+                'skills' => [
+                    'bears',
+                    'beats',
+                    'battlestar galactica',
+                ],
+            ];
+        })->name('show-users-v1');
+
         Route::post('users', function () {
             return [
                 'id'        => 456,
@@ -102,6 +119,7 @@ abstract class TestCase extends Orchestra
 
     protected function setupApiMigrations()
     {
-        \File::copyDirectory(__DIR__.'/ApiMigrations', app_path().'/Http/ApiMigrations');
+        File::deleteDirectory(app_path().'/Http/ApiMigrations');
+        File::copyDirectory(__DIR__.'/ApiMigrations', app_path().'/Http/ApiMigrations');
     }
 }

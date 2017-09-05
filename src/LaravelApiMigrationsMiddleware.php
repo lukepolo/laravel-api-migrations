@@ -34,7 +34,7 @@ class LaravelApiMigrationsMiddleware
         $this->request = $request;
         $this->apiDetails = app()->make('getApiDetails');
 
-        $this->currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
+        $this->currentVersion = $this->getCurrentVersion();
 
         /* @var Migrator $migrator */
         $this->migrator = new Migrator;
@@ -57,6 +57,7 @@ class LaravelApiMigrationsMiddleware
         $user = $this->request->user();
 
         if (empty($this->getVersion())) {
+
             $this->setVersion($this->currentVersion);
 
             if ($user) {
@@ -72,7 +73,7 @@ class LaravelApiMigrationsMiddleware
             }
         }
 
-        $this->releases = $this->releases();
+        $this->getReleases();
 
         return $this;
     }
@@ -80,15 +81,17 @@ class LaravelApiMigrationsMiddleware
     /**
      * @return Collection
      */
-    public function releases() : Collection
+    public function getReleases() : Collection
     {
-        if ($this->releases) {
+        if(!empty($this->releases)) {
             return $this->releases;
         }
 
-        $apiVersions = $this->apiDetails->get($this->getApiVersion());
+        $apiVersions = $this->apiDetails->get($this->getApiVersion())->sortBy(function($value, $key) {
+            return $key;
+        });
 
-        return $apiVersions ? $apiVersions : collect();
+        return $this->releases = $apiVersions ? $apiVersions : collect();
     }
 
     private function validateVersion()
@@ -119,4 +122,16 @@ class LaravelApiMigrationsMiddleware
 
         return $this->apiDetails->keys()->last();
     }
+
+    protected function getCurrentVersion()
+    {
+        $currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
+
+        if(empty($currentVersion)) {
+            $currentVersion = $this->getReleases()->keys()->last();
+        }
+
+        return $currentVersion;
+    }
+
 }

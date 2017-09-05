@@ -34,10 +34,7 @@ class CacheRequestMigrationsCommand extends Command
 
         File::delete($requestMigrationsCache);
 
-        File::put(
-            $requestMigrationsCache,
-            '<?php return '.var_export(app()->make('getApiDetails')->toArray(), true).';'
-        );
+        File::put($requestMigrationsCache, '<?php return '.var_export(app()->make('getApiDetails')->toArray(), true).';');
 
         $this->info('Api Migrations Cached');
     }
