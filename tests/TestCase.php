@@ -2,8 +2,8 @@
 
 namespace LukePOLO\LaravelApiMigrations\Tests;
 
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\File;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase as Orchestra;

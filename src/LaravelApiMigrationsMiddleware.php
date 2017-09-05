@@ -57,7 +57,6 @@ class LaravelApiMigrationsMiddleware
         $user = $this->request->user();
 
         if (empty($this->getVersion())) {
-
             $this->setVersion($this->currentVersion);
 
             if ($user) {
@@ -83,11 +82,11 @@ class LaravelApiMigrationsMiddleware
      */
     public function getReleases() : Collection
     {
-        if(!empty($this->releases)) {
+        if (! empty($this->releases)) {
             return $this->releases;
         }
 
-        $apiVersions = $this->apiDetails->get($this->getApiVersion())->sortBy(function($value, $key) {
+        $apiVersions = $this->apiDetails->get($this->getApiVersion())->sortBy(function ($value, $key) {
             return $key;
         });
 
@@ -127,11 +126,10 @@ class LaravelApiMigrationsMiddleware
     {
         $currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
 
-        if(empty($currentVersion)) {
+        if (empty($currentVersion)) {
             $currentVersion = $this->getReleases()->keys()->last();
         }
 
         return $currentVersion;
     }
-
 }
