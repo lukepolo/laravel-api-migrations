@@ -15,6 +15,38 @@ You write these incrementing migrations to convert your request/responses go bac
 * Major API Versioning Supported
 * Convention Supplied with artisan commands
 
+## How to use in day to day development 
+You should create releases (including your current release) when releasing your API.
+This allows the system to know how to migrate a request/response to and older version of the API.
+
+For example :
+
+**Current** *Release V1 - 2017-08-31* expects the response :
+
+```php
+    [
+        'firstname' => 'Dwight',
+        'lastname'  => 'Schrute',
+        'title'     => 'Assistant to the Regional Manager'
+    ]
+```
+
+Release *V1 - 2017-08-01* expects the response :
+
+```php
+    [
+        'firstname' => 'Dwight',
+        'lastname'  => 'Schrute',
+        'title'     => 'Assistant to the Regional Manager',
+        'secret_title' => 'Assistant Regional Manager',
+    ]
+```
+
+When your users are using the older API they expect to see that secret title, so it migrates the request 2017-08-31 ro 2017-08-01.
+
+While this is a simple example you can see the power with these migrations o create simple steps to migrate your current version of the api
+to an older version of the API very easily.
+
 ## Installation
 
 ```bash
@@ -66,15 +98,23 @@ php artisan vendor:publish --provider="LukePOLO\LaravelApiMigrations\ServiceProv
 
 ## Usage
 
+### Creating a Release
+
+You can generate a new release using the Artisan CLI.
+
+```shell
+php artisan make:api-release
+```
+
 ### Creating a Migration
 
-You can generate a new request migration using the Artisan CLI.
+You can generate a new api migration using the Artisan CLI.
 
 ```shell
 php artisan make:api-migration ExampleMigration
 ```
 
-The command will generate a request migration and publish it to `App/Http/ApiMigrations/V{VersionNumber}/Release_{YYYY_MM_DD}/{MigrationName}`.
+The command will generate a api migration and publish it to `App/Http/ApiMigrations/V{VersionNumber}/Release_{YYYY_MM_DD}/{MigrationName}`.
 
 ### Caching Migrations
 
@@ -102,9 +142,17 @@ To use a different version of your api just attach a header :
 Example : -- link to gist --
 
 ### Versioning
-WIP - Need to solve 1 minor issue then ill write up about this. 
+ 
+You should use the artisan commands above to create releases, including your current release. You can also set your current versions in the config. 
 
-### User Version Pinning
+You can tag your current versions in your config by setting it up like this : 
+```php
+    'current_versions' => [
+        'V1' => '2017-01-31',
+    ],
+```
+
+``### User Version Pinning
 With version pinning you can automatically keep users to that API and allow them to upgrade to your latest version at their
 convince. Once once your user hits your api for the first time it will set the most current version.
 

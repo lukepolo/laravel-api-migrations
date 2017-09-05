@@ -3,6 +3,7 @@
 namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\File;
+use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeReleaseCommand;
 use Symfony\Component\Finder\SplFileInfo;
 use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 use LukePOLO\LaravelApiMigrations\Commands\CacheRequestMigrationsCommand;
@@ -41,6 +42,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->commands([
             ApiMigrationMakeCommand::class,
             CacheRequestMigrationsCommand::class,
+            ApiMigrationMakeReleaseCommand::class,
         ]);
 
         $this->app->singleton(Migrator::class, function () {

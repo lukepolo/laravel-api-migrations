@@ -22,6 +22,7 @@ class LaravelApiMigrationsMiddleware
 
     protected $releases;
     protected $apiDetails;
+    protected $currentVersion;
 
     /**
      * @param \Illuminate\Http\Request $request
@@ -33,6 +34,8 @@ class LaravelApiMigrationsMiddleware
     {
         $this->request = $request;
         $this->apiDetails = app()->make('getApiDetails');
+
+        $this->currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
 
         /* @var Migrator $migrator */
         $this->migrator = Container::getInstance()
@@ -56,15 +59,16 @@ class LaravelApiMigrationsMiddleware
         $user = $this->request->user();
 
         if (empty($this->getVersion())) {
-            $currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
+
+            $this->setVersion($this->currentVersion);
 
             if ($user) {
                 if (! empty($user->api_version)) {
                     $this->setVersion($user->api_version);
                 } else {
-                    if (! empty($currentVersion) && config('api-migrations.version_pinning')) {
+                    if (! empty($this->currentVersion) && config('api-migrations.version_pinning')) {
                         $user->update([
-                            'api_version' => $currentVersion,
+                            'api_version' => $this->currentVersion,
                         ]);
                     }
                 }
@@ -96,6 +100,7 @@ class LaravelApiMigrationsMiddleware
 
         if (
             $version &&
+            $this->currentVersion !== $version &&
             ! $this->releases->keys()->contains($version)
         ) {
             throw new HttpException(400, 'The version is invalid');

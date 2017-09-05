@@ -31,10 +31,7 @@ class UsersRequest extends ApiMigration
     {
         $content = $response->original;
 
-        $content['firstname'] = array_get($content, 'name.firstname');
-        $content['lastname'] = array_get($content, 'name.lastname');
-
-        unset($content['name']);
+        $content['secret_title'] = 'Assistant Regional Manager';
 
         return response()->json($content);
     }
