@@ -83,21 +83,23 @@ abstract class TestCase extends Orchestra
             ];
         })->name('show-users');
 
-        Route::get('v1/users/show', function () {
-            return [
-                'id'     => 123,
-                'name'   => [
-                    'firstname' => 'Dwight',
-                    'lastname'  => 'Schrute',
-                ],
-                'title'  => 'Assistant to the Regional Manager',
-                'skills' => [
-                    'bears',
-                    'beats',
-                    'battlestar galactica',
-                ],
-            ];
-        })->name('show-users-v1');
+        Route::group(['prefix' => '1'], function() {
+            Route::get('users/show', function () {
+                return [
+                    'id'     => 123,
+                    'name'   => [
+                        'firstname' => 'Dwight',
+                        'lastname'  => 'Schrute',
+                    ],
+                    'title'  => 'Assistant to the Regional Manager',
+                    'skills' => [
+                        'bears',
+                        'beats',
+                        'battlestar galactica',
+                    ],
+                ];
+            })->name('show-users-v1');
+        });
 
         Route::post('users', function () {
             return [
