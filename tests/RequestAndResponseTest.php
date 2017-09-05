@@ -37,7 +37,7 @@ class RequestAndResponseTest extends TestCase
     }
 
     /** @test */
-    public function it_will_get_a_modified_user_object()
+    public function it_will_get_a_modified_user_object_of_migrations_of_only_current_and_behind_version_given()
     {
         $response = $this->get(route('show-users'), [
             'Api-Version'  => '2017-08-31',
@@ -54,7 +54,7 @@ class RequestAndResponseTest extends TestCase
     }
 
     /** @test */
-    public function it_will_get_a_odler_modified_user_object()
+    public function it_will_get_modified_user_object_of_multiple_migrations()
     {
         $response = $this->get(route('show-users'), [
             'Api-Version'  => '2017-08-01',

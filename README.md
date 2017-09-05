@@ -46,7 +46,7 @@ When your users are using the older API they expect to see that secret title.
 
 It will then migrate the request **2017-08-31** to **2017-08-01**.
 
-While this is a simple example you can see the power with these migrations o create simple steps to migrate your current version of the api
+While this is a simple example you can see the power with these migrations to create simple steps to migrate your current version of the api
 to an older version of the API very easily.
 
 ## Installation

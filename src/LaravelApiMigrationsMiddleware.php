@@ -5,7 +5,6 @@ namespace LukePOLO\LaravelApiMigrations;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Container\Container;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use LukePOLO\LaravelApiMigrations\Traits\ApiRequestHeadersTrait;
@@ -38,8 +37,7 @@ class LaravelApiMigrationsMiddleware
         $this->currentVersion = config('api-migrations.current_versions.'.$this->getApiVersion());
 
         /* @var Migrator $migrator */
-        $this->migrator = Container::getInstance()
-            ->make(Migrator::class);
+        $this->migrator = new Migrator;
 
         $this->setupRequest()
             ->validateVersion();
@@ -82,7 +80,7 @@ class LaravelApiMigrationsMiddleware
     /**
      * @return Collection
      */
-    private function releases() : Collection
+    public function releases() : Collection
     {
         if ($this->releases) {
             return $this->releases;
