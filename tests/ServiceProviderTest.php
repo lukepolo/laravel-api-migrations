@@ -2,10 +2,10 @@
 
 namespace LukePOLO\LaravelApiMigrations\Tests;
 
+use ReflectionClass;
 use Illuminate\Support\Facades\Artisan;
 use LukePOLO\LaravelApiMigrations\Migrator;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
-use ReflectionClass;
 
 class ServiceProviderTest extends TestCase
 {
@@ -19,7 +19,7 @@ class ServiceProviderTest extends TestCase
     public function it_will_get_collection_with_no_releases()
     {
         $this->app['config']->set('api-migrations', [
-            'path' => 'Nope'
+            'path' => 'Nope',
         ]);
 
         $serviceProvider = new ServiceProvider($this->app);

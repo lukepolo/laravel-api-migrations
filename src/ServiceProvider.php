@@ -3,11 +3,11 @@
 namespace LukePOLO\LaravelApiMigrations;
 
 use Illuminate\Support\Facades\File;
-use LukePOLO\LaravelApiMigrations\Commands\ClearCacheRequestMigrationsCommand;
 use Symfony\Component\Finder\SplFileInfo;
 use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeCommand;
 use LukePOLO\LaravelApiMigrations\Commands\CacheRequestMigrationsCommand;
 use LukePOLO\LaravelApiMigrations\Commands\ApiMigrationMakeReleaseCommand;
+use LukePOLO\LaravelApiMigrations\Commands\ClearCacheRequestMigrationsCommand;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
