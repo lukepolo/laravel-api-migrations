@@ -5,6 +5,10 @@ php:
   - 7.1
   - 7.2
 
+addons:
+  code_climate:
+    repo_token: a31c1e81b54f4e08504f115d84e1d91ae631e6eb30d32420434ac846d24d7aa9
+
 sudo: false
 
 cache:
