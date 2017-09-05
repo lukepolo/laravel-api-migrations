@@ -3,9 +3,7 @@
 namespace LukePOLO\LaravelApiMigrations\Tests;
 
 use Illuminate\Support\Facades\Artisan;
-use LukePOLO\LaravelApiMigrations\Migrator;
 use LukePOLO\LaravelApiMigrations\ServiceProvider;
-use ReflectionClass;
 
 class CommandsTest extends TestCase
 {

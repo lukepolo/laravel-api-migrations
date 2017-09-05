@@ -71,7 +71,6 @@ class ApiMigrationMakeReleaseCommand extends GeneratorCommand
         }
 
         parent::handle();
-
     }
 
     /**
