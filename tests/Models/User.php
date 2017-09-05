@@ -6,9 +6,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-
     protected $fillable = [
-        'api_version'
+        'api_version',
     ];
 
     public $id = 1;
