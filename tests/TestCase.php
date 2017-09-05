@@ -83,7 +83,7 @@ abstract class TestCase extends Orchestra
             ];
         })->name('show-users');
 
-        Route::group(['prefix' => '1'], function() {
+        Route::group(['prefix' => '1'], function () {
             Route::get('users/show', function () {
                 return [
                     'id'     => 123,
