@@ -55,7 +55,6 @@ class ApiMigrationMakeReleaseCommand extends Command
             return false;
         }
 
-
         $this->release = $this->ask('Please enter your release in YYYY-MM-DD format :', Carbon::now()->format('Y-m-d'));
 
         if (! preg_match('/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', str_replace('_', '-', $this->release))) {
